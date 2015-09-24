@@ -1,6 +1,6 @@
 # Проект «Кексограм»
 
-* Студент: [Kater-auf-Dach Михайлин](https://htmlacademy.ru/profile/id23773).
+* Студент: [Kater-auf-Dach](https://htmlacademy.ru/profile/id23773).
 
 
 --

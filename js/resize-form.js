@@ -6,6 +6,34 @@
   var previewImage = resizeForm.querySelector('.resize-image-preview');
   var prevButton = resizeForm['resize-prev'];
 
+//
+
+  var  resizeFormX = resizeForm['resize-x'],
+      resizeFormY = resizeForm['resize-y'],
+      resizeSide  = resizeForm['resize-size'];
+
+  resizeFormX.min = 0;
+  resizeFormY.min = 0;
+  resizeSide.min = 10;
+
+  previewImage.onload = function(evt) {
+    var previewImageX = previewImage.width,
+       previewImageY = previewImage.height;
+    resizeFormX.max = previewImageX;
+    resizeFormY.max = previewImageY;
+    if(previewImageX < previewImageY) {
+      resizeSide.max = previewImageX;
+    }
+    else {
+      resizeSide.max = previewImageY;
+    }
+//    resizeSide.max = (previewImageX < previewImageY) ?  previewImageX : previewImageY;
+//    Number(resizeSide.max);
+    console.log(resizeSide.max, resizeFormX.max, resizeFormY.max);
+   };
+
+
+//
   prevButton.onclick = function(evt) {
     evt.preventDefault();
 
