@@ -7,18 +7,17 @@
   var prevButton = resizeForm['resize-prev'];
 
 //
-
-  var  resizeFormX = resizeForm['resize-x'],
+  var resizeFormX = resizeForm['resize-x'],
       resizeFormY = resizeForm['resize-y'],
       resizeSide  = resizeForm['resize-size'];
 
   resizeFormX.min = 0;
   resizeFormY.min = 0;
-  resizeSide.min = 10;
+  resizeSide.min  = 10;
 
   previewImage.onload = function(evt) {
     var previewImageX = previewImage.width,
-       previewImageY = previewImage.height;
+        previewImageY = previewImage.height;
     resizeFormX.max = previewImageX;
     resizeFormY.max = previewImageY;
     if(previewImageX < previewImageY) {
@@ -29,9 +28,13 @@
     }
 //    resizeSide.max = (previewImageX < previewImageY) ?  previewImageX : previewImageY;
 //    Number(resizeSide.max);
-    console.log(resizeSide.max, resizeFormX.max, resizeFormY.max);
+//    console.log(resizeSide.max, resizeFormX.max, resizeFormY.max);
    };
 
+  resizeSide.onchange = function(evt) {
+    resizeFormX.max = resizeSide.value;
+    resizeFormY.max = resizeSide.value;
+  };
 
 //
   prevButton.onclick = function(evt) {

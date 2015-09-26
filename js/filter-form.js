@@ -19,12 +19,12 @@
     }
 
     previewImage.className = 'filter-image-preview' + ' ' + filterMap[selectedFilter.value];
-  };
+  }
 
   for (var i = 0, l = selectedFilter.length; i < l; i++) {
     selectedFilter[i].onchange = function(evt) {
       setFilter();
-    }
+    };
   }
 
   prevButton.onclick = function(evt) {
@@ -35,11 +35,15 @@
     resizeForm.classList.remove('invisible');
   };
 
-  filterForm.onsubmit = function() {
+  filterForm.onsubmit = function(evt) {
     evt.preventDefault();
-
+    docCookies.setItem('upload-filter', selectedFilter.value);
     uploadForm.classList.remove('invisible');
     filterForm.classList.add('invisible');
+  };
+
+  if (docCookies.hasItem('upload-filter')) {
+        selectedFilter.value = docCookies.getItem('upload-filter');
   }
 
   setFilter();
