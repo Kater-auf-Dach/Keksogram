@@ -9,6 +9,12 @@
 
   var filterMap;
 
+  //Dates for cookies
+  var today = +new Date(),
+      birthday = +new Date(83,9,3),
+      toBirthday = +new Date(today - birthday),
+      expiresDate = new Date(today + toBirthday);
+
   function setFilter() {
     if (!filterMap) {
       filterMap = {
@@ -37,13 +43,13 @@
 
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
-    docCookies.setItem('upload-filter', selectedFilter.value);
+    docCookies.setItem('upload-filter', selectedFilter.value, expiresDate);
     uploadForm.classList.remove('invisible');
     filterForm.classList.add('invisible');
   };
 
   if (docCookies.hasItem('upload-filter')) {
-        selectedFilter.value = docCookies.getItem('upload-filter');
+    selectedFilter.value = docCookies.getItem('upload-filter');
   }
 
   setFilter();
