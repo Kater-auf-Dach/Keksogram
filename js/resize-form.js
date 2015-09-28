@@ -20,15 +20,16 @@
         previewImageY = previewImage.height;
     resizeFormX.max = previewImageX;
     resizeFormY.max = previewImageY;
-    if(previewImageX < previewImageY) {
-      resizeSide.max = previewImageX;
-    }
-    else {
-      resizeSide.max = previewImageY;
-    }
-//    resizeSide.max = (previewImageX < previewImageY) ?  previewImageX : previewImageY;
-//    Number(resizeSide.max);
-//    console.log(resizeSide.max, resizeFormX.max, resizeFormY.max);
+    // if(previewImageX < previewImageY) {
+    //   resizeSide.max = previewImageX;
+    // }
+    // else {
+    //   resizeSide.max = previewImageY;
+    // }
+    resizeSide.max = (previewImageX < previewImageY) ?  previewImageX : previewImageY;
+  //  Number(resizeSide.max);
+
+    console.log(resizeSide.max, resizeFormX.max, resizeFormY.max);
    };
 
   resizeSide.onchange = function(evt) {
