@@ -1,0 +1,25 @@
+{
+  "name": "23773-keksogram",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Обучающий проект «keksogram» от HTML Academy",
+  "author": "Kater-auf-Dach Михайлин",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/js-htmlacademy/23773-keksogram.git"
+  },
+  "bugs": {
+    "url": "https://github.com/js-htmlacademy/23773-keksogram/issues"
+  },
+  "homepage": "https://github.com/js-htmlacademy/23773-keksogram",
+  "devDependencies": {
+    "eslint": "1.5.1"
+  },
+  "scripts": {
+    "gosha": "make",
+    "test": "eslint js/"
+  },
+  "engines": {
+    "node": "^0.12.7"
+  }
+}
