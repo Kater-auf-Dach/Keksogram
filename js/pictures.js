@@ -1,4 +1,6 @@
 (function() {
+  var IMAGE_FAILURE_TIMEOUT = 10000;
+
   var filtersForm = document.querySelector('.filters');
   filtersForm.classList.add('hidden');
 
@@ -13,19 +15,29 @@
         picturesPreview.src = picture['url'];
         picturesPreview.width = 182;
         picturesPreview.height = 182;
+
+        var imageLoadTimeout = setTimeout(function() {
+          newPictureElement.classList.add('picture-load-failure');
+        }, IMAGE_FAILURE_TIMEOUT);
+
         picturesPreview.onload = function () {
           var oldImage = newPictureElement.getElementsByTagName('img')[0];
           newPictureElement.replaceChild(picturesPreview, oldImage);
+          clearTimeout(imageLoadTimeout);
         }
+
         picturesPreview.onerror = function (event) {
           newPictureElement.classList.add('picture-load-failure');
         }
+
     }
 
     newPictureElement.querySelector('.picture-comments').textContent = picture['comments'];
     newPictureElement.querySelector('.picture-likes').textContent = picture['likes'];
+
     picturesFragment.appendChild(newPictureElement);
   });
+
   picturesContainer.appendChild(picturesFragment);
   filtersForm.classList.remove('hidden');
 })();
