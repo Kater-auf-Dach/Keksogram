@@ -9,7 +9,12 @@
   var picturesFragment = document.createDocumentFragment();
 
   pictures.forEach(function(picture) {
-    var newPictureElement = pictureTemplate.content.children[0].cloneNode(true);
+    if(pictureTemplate.content) {
+      var newPictureElement = pictureTemplate.content.children[0].cloneNode(true);
+    }
+    else {
+      var newPictureElement = pictureTemplate.children[0].cloneNode(true);
+    }
     if (picture['url']) {
         var picturesPreview = new Image();
         picturesPreview.src = picture['url'];
