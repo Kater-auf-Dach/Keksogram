@@ -11,7 +11,7 @@
 
   //Dates for cookies
   var today = +new Date(),
-      birthday = +new Date(83,9,3),
+      birthday = +new Date(2014,9,3),
       toBirthday = +new Date(today - birthday),
       expiresDate = new Date(today + toBirthday);
 
