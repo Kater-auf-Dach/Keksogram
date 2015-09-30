@@ -113,16 +113,12 @@
         })
         // And sort this new array
         filteredPictures = filteredPicturesNew.sort(function(a, b) {
-          if (a.date > b.date) { return -1; }
-          if (a.date < b.date) { return 1; }
-          if (a.date === b.date) { return 0; }
+          return b.date - a.date;
         });
         break;
       case 'discussed':
         filteredPictures = filteredPictures.sort(function(a, b) {
-          if (a.comments > b.comments) { return -1; }
-          if (a.comments < b.comments) { return 1; }
-          if (a.comments === b.comments) { return 0; }
+          return b.comments - a.comments;
         });
         break;
       default:
