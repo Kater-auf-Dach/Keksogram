@@ -2,11 +2,11 @@
 (function() {
 
   var ReadyState = {
-  'UNSENT': 0,
-  'OPENED': 1,
-  'HEADERS_RECEIVED': 2,
-  'LOADING': 3,
-  'DONE': 4
+    'UNSENT': 0,
+    'OPENED': 1,
+    'HEADERS_RECEIVED': 2,
+    'LOADING': 3,
+    'DONE': 4
   };
 
   var REQUEST_FAILURE_TIMEOUT = 10000;
@@ -17,35 +17,36 @@
 
   filtersForm.classList.add('hidden');
 
-  //Create DOM elements on page from template
-  function showPictures(pictures) {
+  // Create DOM elements on page from template
+  function showPictures(allPictures) {
     picturesContainer.classList.remove('picture-failure');
     picturesContainer.innerHTML = '';
 
     var pictureTemplate = document.getElementById('picture-template');
     var picturesFragment = document.createDocumentFragment();
+    console.log(pictureTemplate);
 
-    pictures.forEach(function(picture) {
+    allPictures.forEach(function(picture) {
       var newPictureElement = pictureTemplate.content ? pictureTemplate.content.children[0].cloneNode(true) : pictureTemplate.children[0].cloneNode(true);
       if (picture['url']) {
-          var picturesPreview = new Image();
-          picturesPreview.src = picture['url'];
-          picturesPreview.width = 182;
-          picturesPreview.height = 182;
+        var picturesPreview = new Image();
+        picturesPreview.src = picture['url'];
+        picturesPreview.width = 182;
+        picturesPreview.height = 182;
 
-          var imageLoadTimeout = setTimeout(function() {
-            newPictureElement.classList.add('picture-load-failure');
-          }, REQUEST_FAILURE_TIMEOUT);
+        var imageLoadTimeout = setTimeout(function() {
+          newPictureElement.classList.add('picture-load-failure');
+        }, REQUEST_FAILURE_TIMEOUT);
 
-          picturesPreview.onload = function () {
-            var oldImage = newPictureElement.getElementsByTagName('img')[0];
-            newPictureElement.replaceChild(picturesPreview, oldImage);
-            clearTimeout(imageLoadTimeout);
-          };
+        picturesPreview.onload = function() {
+          var oldImage = newPictureElement.getElementsByTagName('img')[0];
+          newPictureElement.replaceChild(picturesPreview, oldImage);
+          clearTimeout(imageLoadTimeout);
+        };
 
-          picturesPreview.onerror = function () {
-            newPictureElement.classList.add('picture-load-failure');
-          };
+        picturesPreview.onerror = function() {
+          newPictureElement.classList.add('picture-load-failure');
+        };
 
       }
 
@@ -59,12 +60,12 @@
     filtersForm.classList.remove('hidden');
   }
 
-  //Error on loading a picture
+  // Error on loading a picture
   function showLoadFailure() {
     picturesContainer.classList.add('pictures-failure');
   }
 
-  //Get JSON through AJAX
+  // Get JSON through AJAX
   function loadPictures(callback) {
     var xhr = new XMLHttpRequest();
     xhr.timeout = REQUEST_FAILURE_TIMEOUT;
@@ -82,7 +83,7 @@
 
         case ReadyState.DONE:
         default:
-          if (loadedXhr.status == 200) {
+          if (loadedXhr.status === 200) {
             var data = loadedXhr.response;
             picturesContainer.classList.remove('picture-loading');
             callback(JSON.parse(data));
@@ -92,25 +93,25 @@
           }
           break;
       }
-    }
-    xhr.ontimeout = function () {
+    };
+    xhr.ontimeout = function() {
       showLoadFailure();
-    }
+    };
     xhr.send();
   }
 
-  //Set the filters for photos
-  function filterPictures(pictures, sortValue) {
-    var filteredPictures = pictures.slice(0);
+  // Set the filters for photos
+  function filterPictures(sortPictures, sortValue) {
+    var filteredPictures = sortPictures.slice(0);
     switch (sortValue) {
       case 'new':
         // Get new array contains photos made last month
-        var filteredPicturesNew = filteredPictures.filter(function (a) {
+        var filteredPicturesNew = filteredPictures.filter(function(a) {
           var today = new Date();
           var lastMonth = today.setMonth(today.getMonth() - 1);
           var datePicture = Date.parse(a.date);
           return datePicture > lastMonth;
-        })
+        });
         // And sort this new array
         filteredPictures = filteredPicturesNew.sort(function(a, b) {
           return b.date - a.date;
@@ -122,20 +123,20 @@
         });
         break;
       default:
-        filteredPictures = pictures.slice(0);
+        filteredPictures = sortPictures.slice(0);
         break;
     }
     return filteredPictures;
   }
 
-  //Initial filters for photos
+  // Initial filters for photos
   function initFilters() {
     var filterElements = document.querySelectorAll('.filters-radio');
     for ( var i = 0; i < filterElements.length; i++) {
-      filterElements[i].onclick = function (event) {
+      filterElements[i].onclick = function(event) {
         var clickedFilter = event.currentTarget;
         setActiveFilter(clickedFilter.value);
-      }
+      };
     }
   }
 
@@ -144,7 +145,7 @@
     showPictures(filteredPictures);
   }
 
-  //Execute all this code
+  // Execute all this code
   initFilters();
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;

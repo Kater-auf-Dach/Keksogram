@@ -1,3 +1,4 @@
+'use strict';
 (function() {
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
@@ -9,11 +10,11 @@
 
   var filterMap;
 
-  //Dates for cookies
+  // Dates for cookies
   var today = +new Date(),
-      birthday = +new Date(2014,9,3),
-      toBirthday = +new Date(today - birthday),
-      expiresDate = new Date(today + toBirthday);
+    birthday = +new Date(2014, 9, 3),
+    toBirthday = +new Date(today - birthday),
+    expiresDate = new Date(today + toBirthday);
 
   function setFilter() {
     if (!filterMap) {
@@ -28,21 +29,21 @@
   }
 
   for (var i = 0, l = selectedFilter.length; i < l; i++) {
-    selectedFilter[i].onchange = function(evt) {
+    selectedFilter[i].onchange = function() {
       setFilter();
     };
   }
 
-  prevButton.onclick = function(evt) {
-    evt.preventDefault();
+  prevButton.onclick = function(event) {
+    event.preventDefault();
 
     filterForm.reset();
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
   };
 
-  filterForm.onsubmit = function(evt) {
-    evt.preventDefault();
+  filterForm.onsubmit = function(event) {
+    event.preventDefault();
     docCookies.setItem('upload-filter', selectedFilter.value, expiresDate);
     uploadForm.classList.remove('invisible');
     filterForm.classList.add('invisible');
