@@ -17,6 +17,7 @@
 
   filtersForm.classList.add('hidden');
 
+  //Create DOM elements on page from template
   function showPictures(pictures) {
     picturesContainer.classList.remove('picture-failure');
     picturesContainer.innerHTML = '';
@@ -58,10 +59,12 @@
     filtersForm.classList.remove('hidden');
   }
 
+  //Error on loading a picture
   function showLoadFailure() {
     picturesContainer.classList.add('pictures-failure');
   }
 
+  //Get JSON through AJAX
   function loadPictures(callback) {
     var xhr = new XMLHttpRequest();
     xhr.timeout = REQUEST_FAILURE_TIMEOUT;
@@ -96,24 +99,19 @@
     xhr.send();
   }
 
+  //Set the filters for photos
   function filterPictures(pictures, sortValue) {
     var filteredPictures = pictures.slice(0);
     switch (sortValue) {
-      case 'popular':
-        filteredPictures = filteredPictures.sort(function(a, b) {
-           return 0;
-        });
-        break;
       case 'new':
-
+        // Get new array contains photos made last month
         var filteredPicturesNew = filteredPictures.filter(function (a) {
           var today = new Date();
           var lastMonth = today.setMonth(today.getMonth() - 1);
           var datePicture = Date.parse(a.date);
           return datePicture > lastMonth;
         })
-        console.log(filteredPicturesNew);
-
+        // And sort this new array
         filteredPictures = filteredPicturesNew.sort(function(a, b) {
           if (a.date > b.date) { return -1; }
           if (a.date < b.date) { return 1; }
@@ -128,11 +126,13 @@
         });
         break;
       default:
+        filteredPictures = pictures.slice(0);
         break;
     }
     return filteredPictures;
   }
 
+  //Initial filters for photos
   function initFilters() {
     var filterElements = document.querySelectorAll('.filters-radio');
     for ( var i = 0; i < filterElements.length; i++) {
@@ -148,6 +148,7 @@
     showPictures(filteredPictures);
   }
 
+  //Execute all this code
   initFilters();
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
