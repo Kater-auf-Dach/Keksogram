@@ -105,7 +105,16 @@
         });
         break;
       case 'new':
-        filteredPictures = filteredPictures.sort(function(a, b) {
+
+        var filteredPicturesNew = filteredPictures.filter(function (a) {
+          var today = new Date();
+          var lastMonth = today.setMonth(today.getMonth() - 1);
+          var datePicture = Date.parse(a.date);
+          return datePicture > lastMonth;
+        })
+        console.log(filteredPicturesNew);
+
+        filteredPictures = filteredPicturesNew.sort(function(a, b) {
           if (a.date > b.date) { return -1; }
           if (a.date < b.date) { return 1; }
           if (a.date === b.date) { return 0; }
@@ -144,5 +153,4 @@
     pictures = loadedPictures;
     showPictures(loadedPictures);
   });
-
 })();
