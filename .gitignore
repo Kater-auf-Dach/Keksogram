@@ -1,5 +1,6 @@
 prepros.cfg
 gosha/
 node_modules/
+npm-debug.log
 .idea
 .sublime*

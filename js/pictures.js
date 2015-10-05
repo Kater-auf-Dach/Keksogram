@@ -10,21 +10,33 @@
   };
 
   var REQUEST_FAILURE_TIMEOUT = 10000;
+  var PHOTO_NUMBER = 12;
 
   var filtersForm = document.querySelector('.filters');
   var picturesContainer = document.querySelector('.pictures');
   var pictures;
+  var currentPictures;
+  var currentPage = 0;
 
   filtersForm.classList.add('hidden');
 
   // Create DOM elements on page from template
-  function showPictures(allPictures) {
-    picturesContainer.classList.remove('picture-failure');
-    picturesContainer.innerHTML = '';
+  function showPictures(allPictures, pageNumber, replace) {
+    replace = typeof replace !== 'undefined' ? replace : true;
+    pageNumber = pageNumber || 0;
+
+
+    if (replace) {
+      picturesContainer.classList.remove('picture-failure');
+      picturesContainer.innerHTML = '';
+    }
 
     var pictureTemplate = document.getElementById('picture-template');
     var picturesFragment = document.createDocumentFragment();
-    console.log(pictureTemplate);
+
+    var picturesFrom = pageNumber * PHOTO_NUMBER;
+    var picturesTo = picturesFrom + PHOTO_NUMBER;
+    allPictures = pictures.slice(picturesFrom, picturesTo);
 
     allPictures.forEach(function(picture) {
       var newPictureElement = pictureTemplate.content ? pictureTemplate.content.children[0].cloneNode(true) : pictureTemplate.children[0].cloneNode(true);
@@ -70,6 +82,7 @@
     var xhr = new XMLHttpRequest();
     xhr.timeout = REQUEST_FAILURE_TIMEOUT;
     xhr.open('get', 'data/pictures.json');
+
     xhr.onreadystatechange = function(event) {
       var loadedXhr = event.target;
 
@@ -108,13 +121,13 @@
         // Get new array contains photos made last month
         var filteredPicturesNew = filteredPictures.filter(function(a) {
           var today = new Date();
-          var lastMonth = today.setMonth(today.getMonth() - 1);
+          var lastMonth = today.setMonth(today.getMonth() - 2);
           var datePicture = Date.parse(a.date);
           return datePicture > lastMonth;
         });
         // And sort this new array
         filteredPictures = filteredPicturesNew.sort(function(a, b) {
-          return b.date - a.date;
+          return a.date - b.date;
         });
         break;
       case 'discussed':
@@ -126,27 +139,44 @@
         filteredPictures = sortPictures.slice(0);
         break;
     }
+    // console.log(filteredPictures)
     return filteredPictures;
   }
 
   // Initial filters for photos
   function initFilters() {
-    var filterElements = document.querySelectorAll('.filters-radio');
-    for ( var i = 0; i < filterElements.length; i++) {
-      filterElements[i].onclick = function(event) {
-        var clickedFilter = event.currentTarget;
-        setActiveFilter(clickedFilter.value);
-      };
-    }
+    var filterContainer = document.querySelector('.filters');
+    filterContainer.addEventListener('click', function(event) {
+      var clickedFilter = event.target;
+      setActiveFilter(clickedFilter.value);
+    });
   }
 
   function setActiveFilter(sortValue) {
-    var filteredPictures = filterPictures(pictures, sortValue);
-    showPictures(filteredPictures);
+    currentPictures = filterPictures(pictures, sortValue);
+    showPictures(currentPictures, currentPage, true);
+  }
+
+  function isNextPageAviable() {
+    return currentPage < Math.ceil(pictures.length / PHOTO_NUMBER);
+  }
+
+  function isAtTheBottom() {
+    var BOTTOM_GAP = 100;
+    return picturesContainer.getBoundingClientRect().bottom - BOTTOM_GAP <= window.innerHeight;
+  }
+
+  function initScroll() {
+    window.addEventListener('scroll', function() {
+      if (isAtTheBottom() && isNextPageAviable()) {
+        showPictures(currentPictures, currentPage++, false);
+      }
+    });
   }
 
   // Execute all this code
   initFilters();
+  initScroll();
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
     showPictures(loadedPictures);
