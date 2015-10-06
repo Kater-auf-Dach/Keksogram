@@ -16,7 +16,7 @@
   var picturesContainer = document.querySelector('.pictures');
   var pictures;
   var currentPictures;
-  var currentPage = 0;
+  var currentPage;
 
   filtersForm.classList.add('hidden');
 
@@ -36,7 +36,8 @@
 
     var picturesFrom = pageNumber * PHOTO_NUMBER;
     var picturesTo = picturesFrom + PHOTO_NUMBER;
-    allPictures = pictures.slice(picturesFrom, picturesTo);
+
+    allPictures = allPictures.slice(picturesFrom, picturesTo);
 
     allPictures.forEach(function(picture) {
       var newPictureElement = pictureTemplate.content ? pictureTemplate.content.children[0].cloneNode(true) : pictureTemplate.children[0].cloneNode(true);
@@ -127,7 +128,9 @@
         });
         // And sort this new array
         filteredPictures = filteredPicturesNew.sort(function(a, b) {
-          return a.date - b.date;
+          if (Date.parse(a.date) > Date.parse(b.date)) return -1;
+          if (Date.parse(a.date) < Date.parse(b.date)) return 1;
+          if (Date.parse(a.date) === Date.parse(b.date)) return 0;
         });
         break;
       case 'discussed':
@@ -154,6 +157,7 @@
 
   function setActiveFilter(sortValue) {
     currentPictures = filterPictures(pictures, sortValue);
+    currentPage = 0;
     showPictures(currentPictures, currentPage, true);
   }
 
