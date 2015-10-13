@@ -199,6 +199,7 @@
 
   // Initial loading for a next photos at the scroll
   function setActiveFilter(sortValue) {
+    document.getElementById('filter-' + sortValue).checked = true;
     currentPictures = filterPictures(pictures, sortValue);
     currentPage = 0;
     showPictures(currentPictures, currentPage, true);
