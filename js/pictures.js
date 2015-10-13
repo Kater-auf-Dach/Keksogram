@@ -237,7 +237,6 @@
   initScroll();
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
-    //setActiveFilter(localStorage.getItem('filterValue') || 'filter-popular');
-    showPictures(loadedPictures);
+    setActiveFilter(localStorage.getItem('filterValue') || 'filter-popular');
   });
 })();
