@@ -70,6 +70,7 @@
       newPictureElement.querySelector('.picture-likes').textContent = picture['likes'];
 
       picturesFragment.appendChild(newPictureElement);
+      setTimeout(checkNextPage, 10)
     });
 
     picturesContainer.appendChild(picturesFragment);
@@ -89,8 +90,7 @@
 
     xhr.onreadystatechange = function(event) {
       var loadedXhr = event.target;
-
-      switch (loadedXhr.ReadyState) {
+      switch (loadedXhr.readyState) {
         case ReadyState.UNSENT:
         case ReadyState.OPENED:
         case ReadyState.HEADERS_RECEIVED:
@@ -102,7 +102,7 @@
         default:
           if (loadedXhr.status === REQUEST_SUCCESS) {
             var data = loadedXhr.response;
-            picturesContainer.classList.remove('picture-loading');
+            picturesContainer.classList.remove('pictures-loading');
             callback(JSON.parse(data));
           }
           if (loadedXhr.status > REQUEST_FAILURE) {
@@ -205,7 +205,11 @@
   }
 
   function isNextPageAviable() {
-    return currentPage < Math.ceil(pictures.length / PHOTO_NUMBER);
+    console.log(currentPage < Math.ceil(currentPictures.length / PHOTO_NUMBER));
+    if (currentPictures.length <= PHOTO_NUMBER) {
+      return false;
+    }
+    return currentPage < Math.ceil(currentPictures.length / PHOTO_NUMBER);
   }
 
   function isAtTheBottom() {
@@ -227,7 +231,7 @@
     });
 
     window.addEventListener('atthebottom', function() {
-      showPictures(currentPictures, currentPage++, false);
+      showPictures(currentPictures, ++currentPage, false);
     });
   }
 
