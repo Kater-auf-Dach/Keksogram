@@ -9,7 +9,9 @@
     'DONE': 4
   };
 
-  var REQUEST_FAILURE_TIMEOUT = 10000;
+  var REQUEST_SUCCESS = 200,
+    REQUEST_FAILURE = 400,
+    REQUEST_FAILURE_TIMEOUT = 10000;
   var PHOTO_NUMBER = 12;
 
   var filtersForm = document.querySelector('.filters');
@@ -20,7 +22,8 @@
 
   filtersForm.classList.add('hidden');
 
-  // Create DOM elements on page from template
+
+  // Create DOM elements on a page from a template
   function showPictures(allPictures, pageNumber, replace) {
     replace = typeof replace !== 'undefined' ? replace : true;
     pageNumber = pageNumber || 0;
@@ -97,12 +100,12 @@
 
         case ReadyState.DONE:
         default:
-          if (loadedXhr.status === 200) {
+          if (loadedXhr.status === REQUEST_SUCCESS) {
             var data = loadedXhr.response;
             picturesContainer.classList.remove('picture-loading');
             callback(JSON.parse(data));
           }
-          if (loadedXhr.status > 400) {
+          if (loadedXhr.status > REQUEST_FAILURE) {
             showLoadFailure();
           }
           break;
@@ -114,12 +117,12 @@
     xhr.send();
   }
 
-  // Set the filters for photos
+  // Set the filters for a photos
   function filterPictures(sortPictures, sortValue) {
     var filteredPictures = sortPictures.slice(0);
     switch (sortValue) {
       case 'new':
-        // Get new array contains photos made last month
+        // Get new array contains the photos made last month
         var filteredPicturesNew = filteredPictures.filter(function(a) {
           var today = new Date();
           var lastMonth = today.setMonth(today.getMonth() - 2);
@@ -128,9 +131,15 @@
         });
         // And sort this new array
         filteredPictures = filteredPicturesNew.sort(function(a, b) {
-          if (Date.parse(a.date) > Date.parse(b.date)) return -1;
-          if (Date.parse(a.date) < Date.parse(b.date)) return 1;
-          if (Date.parse(a.date) === Date.parse(b.date)) return 0;
+          if (Date.parse(a.date) > Date.parse(b.date)) {
+            return -1;
+          }
+          if (Date.parse(a.date) < Date.parse(b.date)) {
+            return 1;
+          }
+          if (Date.parse(a.date) === Date.parse(b.date)) {
+            return 0;
+          }
         });
         break;
       case 'discussed':
@@ -142,19 +151,53 @@
         filteredPictures = sortPictures.slice(0);
         break;
     }
-    // console.log(filteredPictures)
+    localStorage.setItem('filterValue', sortValue);
     return filteredPictures;
   }
 
-  // Initial filters for photos
+  // Initial filters for a photos
+
+
+  // function isHaveParent(element, className) {
+  //   do {
+  //     if (element.classList.contains(className)) {
+  //       return true;
+  //     }
+  //     element = element.parentElement;
+  //   } while (element);
+
+  //   return false;
+  // }
+
+  // function initFilters() {
+  //   var filterContainer = document.querySelector('.filters');
+  //   filterContainer.addEventListener('click', function(event) {
+  //     var clickedFilter = event.target;
+  //     if (isHaveParent(clickedFilter, 'filters-radio')) {
+  //       setActiveFilter(clickedFilter.value);
+  //     }
+  //   });
+  // }
+
+
   function initFilters() {
     var filterContainer = document.querySelector('.filters');
     filterContainer.addEventListener('click', function(event) {
       var clickedFilter = event.target;
-      setActiveFilter(clickedFilter.value);
+
+      while (clickedFilter !== filterContainer) {
+        if (clickedFilter.className === 'filters-radio') {
+          setActiveFilter(clickedFilter.value);
+          return;
+        }
+        clickedFilter = clickedFilter.parentElement;
+      }
+
     });
   }
 
+
+  // Initial loading for a next photos at the scroll
   function setActiveFilter(sortValue) {
     currentPictures = filterPictures(pictures, sortValue);
     currentPage = 0;
@@ -170,19 +213,31 @@
     return picturesContainer.getBoundingClientRect().bottom - BOTTOM_GAP <= window.innerHeight;
   }
 
+  function checkNextPage() {
+    if (isAtTheBottom() && isNextPageAviable()) {
+      window.dispatchEvent(new CustomEvent('atthebottom'));
+    }
+  }
+
   function initScroll() {
+    var someTimeout;
     window.addEventListener('scroll', function() {
-      if (isAtTheBottom() && isNextPageAviable()) {
-        showPictures(currentPictures, currentPage++, false);
-      }
+      clearTimeout(someTimeout);
+      someTimeout = setTimeout(checkNextPage, 100);
+    });
+
+    window.addEventListener('atthebottom', function() {
+      showPictures(currentPictures, currentPage++, false);
     });
   }
+
 
   // Execute all this code
   initFilters();
   initScroll();
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
+    //setActiveFilter(localStorage.getItem('filterValue') || 'filter-popular');
     showPictures(loadedPictures);
   });
 })();
