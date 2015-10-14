@@ -9,22 +9,38 @@
     'DONE': 4
   };
 
-  var REQUEST_FAILURE_TIMEOUT = 10000;
+  var REQUEST_SUCCESS = 200,
+    REQUEST_FAILURE = 400,
+    REQUEST_FAILURE_TIMEOUT = 10000;
+  var PHOTO_NUMBER = 12;
 
   var filtersForm = document.querySelector('.filters');
   var picturesContainer = document.querySelector('.pictures');
   var pictures;
+  var currentPictures;
+  var currentPage;
 
   filtersForm.classList.add('hidden');
 
-  // Create DOM elements on page from template
-  function showPictures(allPictures) {
-    picturesContainer.classList.remove('picture-failure');
-    picturesContainer.innerHTML = '';
+
+  // Create DOM elements on a page from a template
+  function showPictures(allPictures, pageNumber, replace) {
+    replace = typeof replace !== 'undefined' ? replace : true;
+    pageNumber = pageNumber || 0;
+
+
+    if (replace) {
+      picturesContainer.classList.remove('picture-failure');
+      picturesContainer.innerHTML = '';
+    }
 
     var pictureTemplate = document.getElementById('picture-template');
     var picturesFragment = document.createDocumentFragment();
-    console.log(pictureTemplate);
+
+    var picturesFrom = pageNumber * PHOTO_NUMBER;
+    var picturesTo = picturesFrom + PHOTO_NUMBER;
+
+    allPictures = allPictures.slice(picturesFrom, picturesTo);
 
     allPictures.forEach(function(picture) {
       var newPictureElement = pictureTemplate.content ? pictureTemplate.content.children[0].cloneNode(true) : pictureTemplate.children[0].cloneNode(true);
@@ -54,6 +70,7 @@
       newPictureElement.querySelector('.picture-likes').textContent = picture['likes'];
 
       picturesFragment.appendChild(newPictureElement);
+      setTimeout(checkNextPage, 10)
     });
 
     picturesContainer.appendChild(picturesFragment);
@@ -70,10 +87,10 @@
     var xhr = new XMLHttpRequest();
     xhr.timeout = REQUEST_FAILURE_TIMEOUT;
     xhr.open('get', 'data/pictures.json');
+
     xhr.onreadystatechange = function(event) {
       var loadedXhr = event.target;
-
-      switch (loadedXhr.ReadyState) {
+      switch (loadedXhr.readyState) {
         case ReadyState.UNSENT:
         case ReadyState.OPENED:
         case ReadyState.HEADERS_RECEIVED:
@@ -83,12 +100,12 @@
 
         case ReadyState.DONE:
         default:
-          if (loadedXhr.status === 200) {
+          if (loadedXhr.status === REQUEST_SUCCESS) {
             var data = loadedXhr.response;
-            picturesContainer.classList.remove('picture-loading');
+            picturesContainer.classList.remove('pictures-loading');
             callback(JSON.parse(data));
           }
-          if (loadedXhr.status > 400) {
+          if (loadedXhr.status > REQUEST_FAILURE) {
             showLoadFailure();
           }
           break;
@@ -100,21 +117,29 @@
     xhr.send();
   }
 
-  // Set the filters for photos
+  // Set the filters for a photos
   function filterPictures(sortPictures, sortValue) {
     var filteredPictures = sortPictures.slice(0);
     switch (sortValue) {
       case 'new':
-        // Get new array contains photos made last month
+        // Get new array contains the photos made last month
         var filteredPicturesNew = filteredPictures.filter(function(a) {
           var today = new Date();
-          var lastMonth = today.setMonth(today.getMonth() - 1);
+          var lastMonth = today.setMonth(today.getMonth() - 2);
           var datePicture = Date.parse(a.date);
           return datePicture > lastMonth;
         });
         // And sort this new array
         filteredPictures = filteredPicturesNew.sort(function(a, b) {
-          return b.date - a.date;
+          if (Date.parse(a.date) > Date.parse(b.date)) {
+            return -1;
+          }
+          if (Date.parse(a.date) < Date.parse(b.date)) {
+            return 1;
+          }
+          if (Date.parse(a.date) === Date.parse(b.date)) {
+            return 0;
+          }
         });
         break;
       case 'discussed':
@@ -126,29 +151,97 @@
         filteredPictures = sortPictures.slice(0);
         break;
     }
+    localStorage.setItem('filterValue', sortValue);
     return filteredPictures;
   }
 
-  // Initial filters for photos
+  // Initial filters for a photos
+
+
+  // function isHaveParent(element, className) {
+  //   do {
+  //     if (element.classList.contains(className)) {
+  //       return true;
+  //     }
+  //     element = element.parentElement;
+  //   } while (element);
+
+  //   return false;
+  // }
+
+  // function initFilters() {
+  //   var filterContainer = document.querySelector('.filters');
+  //   filterContainer.addEventListener('click', function(event) {
+  //     var clickedFilter = event.target;
+  //     if (isHaveParent(clickedFilter, 'filters-radio')) {
+  //       setActiveFilter(clickedFilter.value);
+  //     }
+  //   });
+  // }
+
+
   function initFilters() {
-    var filterElements = document.querySelectorAll('.filters-radio');
-    for ( var i = 0; i < filterElements.length; i++) {
-      filterElements[i].onclick = function(event) {
-        var clickedFilter = event.currentTarget;
-        setActiveFilter(clickedFilter.value);
-      };
+    var filterContainer = document.querySelector('.filters');
+    filterContainer.addEventListener('click', function(event) {
+      var clickedFilter = event.target;
+
+      while (clickedFilter !== filterContainer) {
+        if (clickedFilter.className === 'filters-radio') {
+          setActiveFilter(clickedFilter.value);
+          return;
+        }
+        clickedFilter = clickedFilter.parentElement;
+      }
+
+    });
+  }
+
+
+  // Initial loading for a next photos at the scroll
+  function setActiveFilter(sortValue) {
+    document.getElementById('filter-' + sortValue).checked = true;
+    currentPictures = filterPictures(pictures, sortValue);
+    currentPage = 0;
+    showPictures(currentPictures, currentPage, true);
+  }
+
+  function isNextPageAviable() {
+    console.log(currentPage < Math.ceil(currentPictures.length / PHOTO_NUMBER));
+    if (currentPictures.length <= PHOTO_NUMBER) {
+      return false;
+    }
+    return currentPage < Math.ceil(currentPictures.length / PHOTO_NUMBER);
+  }
+
+  function isAtTheBottom() {
+    var BOTTOM_GAP = 100;
+    return picturesContainer.getBoundingClientRect().bottom - BOTTOM_GAP <= window.innerHeight;
+  }
+
+  function checkNextPage() {
+    if (isAtTheBottom() && isNextPageAviable()) {
+      window.dispatchEvent(new CustomEvent('atthebottom'));
     }
   }
 
-  function setActiveFilter(sortValue) {
-    var filteredPictures = filterPictures(pictures, sortValue);
-    showPictures(filteredPictures);
+  function initScroll() {
+    var someTimeout;
+    window.addEventListener('scroll', function() {
+      clearTimeout(someTimeout);
+      someTimeout = setTimeout(checkNextPage, 100);
+    });
+
+    window.addEventListener('atthebottom', function() {
+      showPictures(currentPictures, ++currentPage, false);
+    });
   }
+
 
   // Execute all this code
   initFilters();
+  initScroll();
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
-    showPictures(loadedPictures);
+    setActiveFilter(localStorage.getItem('filterValue') || 'filter-popular');
   });
 })();
