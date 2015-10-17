@@ -45,11 +45,11 @@
     this._element.addEventListener('click', this._onClick);
   };
 
-  Photo.prototype.unrender = function() {
-    this._element.parentNode.removeChild(this._element);
-    this._element.removeEventListener('click', this._onClick);
-    this._element = null;
-  };
+  //Photo.prototype.unrender = function() {
+  //  this._element.parentNode.removeChild(this._element);
+  //  this._element.removeEventListener('click', this._onClick);
+  //  this._element = null;
+  //};
 
   Photo.prototype._onClick = function(event) {
     event.preventDefault();
@@ -59,9 +59,9 @@
     }
   };
 
-  Photo.prototype.getCurrentPhoto = function() {
-    return this._data.url;
-  };
+  //Photo.prototype.getCurrentPhoto = function() {
+  //  return this._data.url;
+  //};
 
   window.Photo = Photo;
 

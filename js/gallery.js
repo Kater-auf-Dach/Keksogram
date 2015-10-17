@@ -46,7 +46,8 @@
   };
 
   Gallery.prototype._onPhotoClick = function(event) {
-    this.setCurrentPhoto(this._currentPhoto);
+    this.setCurrentPhoto(this._currentPhoto+1);
+    this._showCurrentPhoto();
   };
 
   Gallery.prototype._onCloseClick = function(event) {
