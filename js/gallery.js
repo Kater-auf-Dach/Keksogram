@@ -59,14 +59,17 @@
     switch (this._currentKey) {
       case Key.LEFT:
         this.setCurrentPhoto(this._currentPhoto - 1);
+        this._showCurrentPhoto();
         break;
       case Key.RIGHT:
         this.setCurrentPhoto(this._currentPhoto + 1);
+        this._showCurrentPhoto();
         break;
       case Key.ESC:
         this.hide();
         break;
       default:
+
         break;
     }
   };
@@ -81,7 +84,7 @@
       return;
     }
     this._currentPhoto = index;
-    this._showCurrentPhoto();
+
   };
 
   Gallery.prototype._showCurrentPhoto = function() {
