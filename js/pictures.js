@@ -207,8 +207,8 @@
       if(!gallery) {
         gallery = new Gallery();
       }
-      gallery.setCurrentPhoto(event.detail.pictureElement.id);
       gallery.setPhotos(currentPictures);
+      gallery.setCurrentPhoto(event.detail.pictureElement.id);
       gallery.show();
     })
   }

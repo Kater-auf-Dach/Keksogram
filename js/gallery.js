@@ -46,8 +46,6 @@
   };
 
   Gallery.prototype._onPhotoClick = function(event) {
-    event.preventDefault();
-    console.log('click');
     this.setCurrentPhoto(this._currentPhoto + 1);
   };
 
