@@ -1,7 +1,8 @@
 'use strict';
 (function() {
 
-  var Photo = function(data) {
+  var Photo = function(id, data) {
+    this.id = id;
     this._data = data;
     this._element = null;
     this._onClick = this._onClick.bind(this);

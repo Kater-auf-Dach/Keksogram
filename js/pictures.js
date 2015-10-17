@@ -42,8 +42,8 @@
     var picturesTo = picturesFrom + PHOTO_NUMBER;
     picturesForRender = picturesForRender.slice(picturesFrom, picturesTo);
 
-    picturesForRender.forEach(function(picture) {
-      var newPictureElement = new Photo(picture);
+    picturesForRender.forEach(function(picture, id) {
+      var newPictureElement = new Photo(id, picture);
       newPictureElement.render(picturesFragment);
 
       setTimeout(checkNextPage, 10);
@@ -163,10 +163,9 @@
   function setActiveFilter(sortValue) {
     document.getElementById('filter-' + sortValue).checked = true;
     currentPictures = filterPictures(pictures, sortValue);
-    photos = currentPictures.map(function(picture) {
-      return picture.url;
-    });
-    gallery._setPhotos(photos);
+    //photos = currentPictures.map(function(picture) {
+    //  return picture.url;
+    //});
     //console.log(gallery._photos);
     currentPage = 0;
     showPictures(currentPictures, currentPage, true);
@@ -202,13 +201,14 @@
   }
 
   function initGallery() {
-    if(!gallery) {
-      gallery = new Gallery();
-    }
+
 
     window.addEventListener('galleryclick', function(event) {
-      var currentPhotoNumber = gallery._photos.indexOf(event.detail.pictureElement._data.getCurrentPhoto);
-      gallery._setCurrentPhoto(currentPhotoNumber);
+      if(!gallery) {
+        gallery = new Gallery();
+      }
+      gallery.setCurrentPhoto(event.detail.pictureElement.id);
+      gallery.setPhotos(currentPictures);
       gallery.show();
     })
   }
