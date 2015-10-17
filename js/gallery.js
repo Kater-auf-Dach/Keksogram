@@ -1,5 +1,4 @@
 'use strict';
-
 (function() {
 
   var Key = {
@@ -45,7 +44,7 @@
     this._currentPhoto = 0;
   };
 
-  Gallery.prototype._onPhotoClick = function(event) {
+  Gallery.prototype._onPhotoClick = function() {
     this.setCurrentPhoto(this._currentPhoto + 1);
     this._showCurrentPhoto();
   };
