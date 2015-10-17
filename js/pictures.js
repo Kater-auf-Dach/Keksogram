@@ -21,10 +21,9 @@
   var currentPictures;
   var currentPage;
   var gallery;
-  var photos = [];
+
 
   filtersForm.classList.add('hidden');
-
 
   // Create DOM elements on a page from a template
   function showPictures(picturesForRender, pageNumber, replace) {
@@ -193,16 +192,16 @@
 
 
     window.addEventListener('galleryclick', function(event) {
-      if(!gallery) {
+      if (!gallery) {
         gallery = new Gallery();
       }
-      gallery.setPhotos(currentPictures.map(function(picture){
+      gallery.setPhotos(currentPictures.map(function(picture) {
         return picture.url;
       }));
       gallery.setCurrentPhoto(event.detail.pictureElement.id);
       gallery.show();
     })
-  }
+  };
 
   // Execute all this code
   initFilters();
