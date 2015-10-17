@@ -137,13 +137,6 @@
   }
 
   // Initial filters for a photos
-
-  // filtersContainer.addEventListener('click', function(event) {
-  //   var clickedFilter = event.target;
-  // if (clickedFilter.classList.contains('filter-radio')) {
-  //   setActiveFilter(clickedFilter.value);
-  // }
-
   function initFilters() {
     var filtersContainer = document.querySelector('.filters');
     filtersContainer.addEventListener('click', function(event) {
