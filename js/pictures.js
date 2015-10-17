@@ -9,9 +9,9 @@
     'DONE': 4
   };
 
-  var REQUEST_SUCCESS = 200,
-    REQUEST_FAILURE = 400,
-    REQUEST_FAILURE_TIMEOUT = 10000;
+  var REQUEST_SUCCESS = 200;
+  var REQUEST_FAILURE = 400;
+  var REQUEST_FAILURE_TIMEOUT = 10000;
   var PHOTO_NUMBER = 12;
 
   var filtersForm = document.querySelector('.filters');
@@ -24,53 +24,26 @@
 
 
   // Create DOM elements on a page from a template
-  function showPictures(allPictures, pageNumber, replace) {
+  function showPictures(picturesForRender, pageNumber, replace) {
     replace = typeof replace !== 'undefined' ? replace : true;
     pageNumber = pageNumber || 0;
-
 
     if (replace) {
       picturesContainer.classList.remove('picture-failure');
       picturesContainer.innerHTML = '';
     }
 
-    var pictureTemplate = document.getElementById('picture-template');
     var picturesFragment = document.createDocumentFragment();
 
     var picturesFrom = pageNumber * PHOTO_NUMBER;
     var picturesTo = picturesFrom + PHOTO_NUMBER;
+    picturesForRender = picturesForRender.slice(picturesFrom, picturesTo);
 
-    allPictures = allPictures.slice(picturesFrom, picturesTo);
+    picturesForRender.forEach(function(picture) {
+      var newPictureElement = new Photo(picture);
+      newPictureElement.render(picturesFragment);
 
-    allPictures.forEach(function(picture) {
-      var newPictureElement = pictureTemplate.content ? pictureTemplate.content.children[0].cloneNode(true) : pictureTemplate.children[0].cloneNode(true);
-      if (picture['url']) {
-        var picturesPreview = new Image();
-        picturesPreview.src = picture['url'];
-        picturesPreview.width = 182;
-        picturesPreview.height = 182;
-
-        var imageLoadTimeout = setTimeout(function() {
-          newPictureElement.classList.add('picture-load-failure');
-        }, REQUEST_FAILURE_TIMEOUT);
-
-        picturesPreview.onload = function() {
-          var oldImage = newPictureElement.getElementsByTagName('img')[0];
-          newPictureElement.replaceChild(picturesPreview, oldImage);
-          clearTimeout(imageLoadTimeout);
-        };
-
-        picturesPreview.onerror = function() {
-          newPictureElement.classList.add('picture-load-failure');
-        };
-
-      }
-
-      newPictureElement.querySelector('.picture-comments').textContent = picture['comments'];
-      newPictureElement.querySelector('.picture-likes').textContent = picture['likes'];
-
-      picturesFragment.appendChild(newPictureElement);
-      setTimeout(checkNextPage, 10)
+      setTimeout(checkNextPage, 10);
     });
 
     picturesContainer.appendChild(picturesFragment);
@@ -240,6 +213,7 @@
   // Execute all this code
   initFilters();
   initScroll();
+
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
     setActiveFilter(localStorage.getItem('filterValue') || 'filter-popular');
