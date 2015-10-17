@@ -1,3 +1,4 @@
+/* global Photo: true  Gallery: true */
 'use strict';
 (function() {
 
@@ -19,6 +20,8 @@
   var pictures;
   var currentPictures;
   var currentPage;
+  var gallery;
+  var photos = [];
 
   filtersForm.classList.add('hidden');
 
@@ -94,6 +97,11 @@
   function filterPictures(sortPictures, sortValue) {
     var filteredPictures = sortPictures.slice(0);
     switch (sortValue) {
+      case 'popular':
+        filteredPictures = filteredPictures.sort(function(a, b) {
+          return b.likes - a.likes;
+        });
+        break;
       case 'new':
         // Get new array contains the photos made last month
         var filteredPicturesNew = filteredPictures.filter(function(a) {
@@ -130,42 +138,24 @@
 
   // Initial filters for a photos
 
-
-  // function isHaveParent(element, className) {
-  //   do {
-  //     if (element.classList.contains(className)) {
-  //       return true;
-  //     }
-  //     element = element.parentElement;
-  //   } while (element);
-
-  //   return false;
+  // filtersContainer.addEventListener('click', function(event) {
+  //   var clickedFilter = event.target;
+  // if (clickedFilter.classList.contains('filter-radio')) {
+  //   setActiveFilter(clickedFilter.value);
   // }
-
-  // function initFilters() {
-  //   var filterContainer = document.querySelector('.filters');
-  //   filterContainer.addEventListener('click', function(event) {
-  //     var clickedFilter = event.target;
-  //     if (isHaveParent(clickedFilter, 'filters-radio')) {
-  //       setActiveFilter(clickedFilter.value);
-  //     }
-  //   });
-  // }
-
 
   function initFilters() {
-    var filterContainer = document.querySelector('.filters');
-    filterContainer.addEventListener('click', function(event) {
+    var filtersContainer = document.querySelector('.filters');
+    filtersContainer.addEventListener('click', function(event) {
       var clickedFilter = event.target;
 
-      while (clickedFilter !== filterContainer) {
-        if (clickedFilter.className === 'filters-radio') {
+      while (clickedFilter !== filtersContainer) {
+        if (clickedFilter.classList.contains('filters-radio')) {
           setActiveFilter(clickedFilter.value);
           return;
         }
         clickedFilter = clickedFilter.parentElement;
       }
-
     });
   }
 
@@ -179,7 +169,6 @@
   }
 
   function isNextPageAviable() {
-    console.log(currentPage < Math.ceil(currentPictures.length / PHOTO_NUMBER));
     if (currentPictures.length <= PHOTO_NUMBER) {
       return false;
     }
@@ -209,13 +198,35 @@
     });
   }
 
+  function showFirstPage() {
+    console.log(currentPictures)
+    //photos = currentPictures.map(function(picture) {
+    //  return picture.url;
+    //});
+    //gallery._setPhotos(photos);
+    //console.log(photos)
+  }
+
+  function initGallery() {
+    if(!gallery) {
+      gallery = new Gallery();
+    }
+
+    window.addEventListener('galleryclick', function(event) {
+      var currentPhotoNumber = gallery._photos.indexOf(event.detail.pictureElement._data.getCurrentPhoto);
+      gallery._setCurrentPhoto(currentPhotoNumber);
+      gallery.show();
+    })
+  }
 
   // Execute all this code
   initFilters();
   initScroll();
+  showFirstPage();
+  initGallery();
 
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
-    setActiveFilter(localStorage.getItem('filterValue') || 'filter-popular');
+    setActiveFilter(localStorage.getItem('filterValue') || 'popular');
   });
 })();

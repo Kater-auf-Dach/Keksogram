@@ -52,7 +52,7 @@
 
   Photo.prototype._onClick = function() {
     if (!this._element.classList.contains('picture-load-failure')) {
-      var galleryEvent = new CustomEvent('show_gallery', { detail: { pictureElement: this }});
+      var galleryEvent = new CustomEvent('galleryclick', { detail: { pictureElement: this }});
       window.dispatchEvent(galleryEvent);
     }
   };
