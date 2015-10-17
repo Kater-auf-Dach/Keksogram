@@ -163,10 +163,6 @@
   function setActiveFilter(sortValue) {
     document.getElementById('filter-' + sortValue).checked = true;
     currentPictures = filterPictures(pictures, sortValue);
-    //photos = currentPictures.map(function(picture) {
-    //  return picture.url;
-    //});
-    //console.log(gallery._photos);
     currentPage = 0;
     showPictures(currentPictures, currentPage, true);
   }
@@ -207,7 +203,9 @@
       if(!gallery) {
         gallery = new Gallery();
       }
-      gallery.setPhotos(currentPictures);
+      gallery.setPhotos(currentPictures.map(function(picture){
+        return picture.url;
+      }));
       gallery.setCurrentPhoto(event.detail.pictureElement.id);
       gallery.show();
     })

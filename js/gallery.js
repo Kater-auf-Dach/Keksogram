@@ -46,7 +46,7 @@
   };
 
   Gallery.prototype._onPhotoClick = function(event) {
-    this.setCurrentPhoto(this._currentPhoto + 1);
+    this.setCurrentPhoto(this._currentPhoto);
   };
 
   Gallery.prototype._onCloseClick = function(event) {
@@ -58,10 +58,10 @@
     this._currentKey = event.keyCode;
     switch (this._currentKey) {
       case Key.LEFT:
-        this.setCurrentPhoto(this.setCurrentPhoto - 1);
+        this.setCurrentPhoto(this._currentPhoto - 1);
         break;
       case Key.RIGHT:
-        this.setCurrentPhoto(this.setCurrentPhoto + 1);
+        this.setCurrentPhoto(this._currentPhoto + 1);
         break;
       case Key.ESC:
         this.hide();

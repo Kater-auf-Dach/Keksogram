@@ -2,7 +2,7 @@
 (function() {
 
   var Photo = function(id, data) {
-    this._id = id;
+    this.id = id;
     this._data = data;
     this._element = null;
     this._onClick = this._onClick.bind(this);
@@ -51,7 +51,7 @@
     this._element = null;
   };
 
-  Photo.prototype._onClick = function() {
+  Photo.prototype._onClick = function(event) {
     event.preventDefault();
     if (!this._element.classList.contains('picture-load-failure')) {
       var galleryEvent = new CustomEvent('galleryclick', { detail: { pictureElement: this }});
