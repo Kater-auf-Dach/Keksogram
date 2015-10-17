@@ -1,7 +1,8 @@
 'use strict';
 (function() {
 
-  var Photo = function(data) {
+  var Photo = function(id, data) {
+    this.id = id;
     this._data = data;
     this._element = null;
     this._onClick = this._onClick.bind(this);
@@ -44,22 +45,23 @@
     this._element.addEventListener('click', this._onClick);
   };
 
-  Photo.prototype.unrender = function() {
-    this._element.parentNode.removeChild(this._element);
-    this._element.removeEventListener('click', this._onClick);
-    this._element = null;
-  };
+  //Photo.prototype.unrender = function() {
+  //  this._element.parentNode.removeChild(this._element);
+  //  this._element.removeEventListener('click', this._onClick);
+  //  this._element = null;
+  //};
 
-  Photo.prototype._onClick = function() {
+  Photo.prototype._onClick = function(event) {
+    event.preventDefault();
     if (!this._element.classList.contains('picture-load-failure')) {
-      var galleryEvent = new CustomEvent('show_gallery', { detail: { pictureElement: this }});
+      var galleryEvent = new CustomEvent('galleryclick', { detail: { pictureElement: this }});
       window.dispatchEvent(galleryEvent);
     }
   };
 
-  Photo.prototype.getCurrentPhoto = function() {
-    return this._data.url;
-  };
+  //Photo.prototype.getCurrentPhoto = function() {
+  //  return this._data.url;
+  //};
 
   window.Photo = Photo;
 

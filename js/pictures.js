@@ -1,3 +1,4 @@
+/* global Photo: true  Gallery: true */
 'use strict';
 (function() {
 
@@ -19,6 +20,8 @@
   var pictures;
   var currentPictures;
   var currentPage;
+  var gallery;
+  var photos = [];
 
   filtersForm.classList.add('hidden');
 
@@ -39,8 +42,8 @@
     var picturesTo = picturesFrom + PHOTO_NUMBER;
     picturesForRender = picturesForRender.slice(picturesFrom, picturesTo);
 
-    picturesForRender.forEach(function(picture) {
-      var newPictureElement = new Photo(picture);
+    picturesForRender.forEach(function(picture, id) {
+      var newPictureElement = new Photo(id, picture);
       newPictureElement.render(picturesFragment);
 
       setTimeout(checkNextPage, 10);
@@ -94,6 +97,11 @@
   function filterPictures(sortPictures, sortValue) {
     var filteredPictures = sortPictures.slice(0);
     switch (sortValue) {
+      case 'popular':
+        filteredPictures = filteredPictures.sort(function(a, b) {
+          return b.likes - a.likes;
+        });
+        break;
       case 'new':
         // Get new array contains the photos made last month
         var filteredPicturesNew = filteredPictures.filter(function(a) {
@@ -129,46 +137,20 @@
   }
 
   // Initial filters for a photos
-
-
-  // function isHaveParent(element, className) {
-  //   do {
-  //     if (element.classList.contains(className)) {
-  //       return true;
-  //     }
-  //     element = element.parentElement;
-  //   } while (element);
-
-  //   return false;
-  // }
-
-  // function initFilters() {
-  //   var filterContainer = document.querySelector('.filters');
-  //   filterContainer.addEventListener('click', function(event) {
-  //     var clickedFilter = event.target;
-  //     if (isHaveParent(clickedFilter, 'filters-radio')) {
-  //       setActiveFilter(clickedFilter.value);
-  //     }
-  //   });
-  // }
-
-
   function initFilters() {
-    var filterContainer = document.querySelector('.filters');
-    filterContainer.addEventListener('click', function(event) {
+    var filtersContainer = document.querySelector('.filters');
+    filtersContainer.addEventListener('click', function(event) {
       var clickedFilter = event.target;
 
-      while (clickedFilter !== filterContainer) {
-        if (clickedFilter.className === 'filters-radio') {
+      while (clickedFilter !== filtersContainer) {
+        if (clickedFilter.classList.contains('filters-radio')) {
           setActiveFilter(clickedFilter.value);
           return;
         }
         clickedFilter = clickedFilter.parentElement;
       }
-
     });
   }
-
 
   // Initial loading for a next photos at the scroll
   function setActiveFilter(sortValue) {
@@ -177,9 +159,7 @@
     currentPage = 0;
     showPictures(currentPictures, currentPage, true);
   }
-
   function isNextPageAviable() {
-    console.log(currentPage < Math.ceil(currentPictures.length / PHOTO_NUMBER));
     if (currentPictures.length <= PHOTO_NUMBER) {
       return false;
     }
@@ -209,13 +189,28 @@
     });
   }
 
+  function initGallery() {
+
+
+    window.addEventListener('galleryclick', function(event) {
+      if(!gallery) {
+        gallery = new Gallery();
+      }
+      gallery.setPhotos(currentPictures.map(function(picture){
+        return picture.url;
+      }));
+      gallery.setCurrentPhoto(event.detail.pictureElement.id);
+      gallery.show();
+    })
+  }
 
   // Execute all this code
   initFilters();
   initScroll();
+  initGallery();
 
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;
-    setActiveFilter(localStorage.getItem('filterValue') || 'filter-popular');
+    setActiveFilter(localStorage.getItem('filterValue') || 'popular');
   });
 })();
