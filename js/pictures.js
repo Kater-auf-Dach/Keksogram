@@ -159,15 +159,18 @@
     });
   }
 
-
   // Initial loading for a next photos at the scroll
   function setActiveFilter(sortValue) {
     document.getElementById('filter-' + sortValue).checked = true;
     currentPictures = filterPictures(pictures, sortValue);
+    photos = currentPictures.map(function(picture) {
+      return picture.url;
+    });
+    gallery._setPhotos(photos);
+    //console.log(gallery._photos);
     currentPage = 0;
     showPictures(currentPictures, currentPage, true);
   }
-
   function isNextPageAviable() {
     if (currentPictures.length <= PHOTO_NUMBER) {
       return false;
@@ -198,15 +201,6 @@
     });
   }
 
-  function showFirstPage() {
-    console.log(currentPictures)
-    //photos = currentPictures.map(function(picture) {
-    //  return picture.url;
-    //});
-    //gallery._setPhotos(photos);
-    //console.log(photos)
-  }
-
   function initGallery() {
     if(!gallery) {
       gallery = new Gallery();
@@ -222,7 +216,6 @@
   // Execute all this code
   initFilters();
   initScroll();
-  showFirstPage();
   initGallery();
 
   loadPictures(function(loadedPictures) {
