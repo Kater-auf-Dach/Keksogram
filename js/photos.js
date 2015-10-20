@@ -78,9 +78,6 @@
           return b.comments - a.comments;
         });
         break;
-      default:
-        filteredPhotos = sortPictures.slice(0);
-        break;
     }
     photosCollection.reset(filteredPhotos);
     localStorage.setItem('filterValue', sortValue);
@@ -114,7 +111,7 @@
     photosContainer.classList.add('pictures-failure');
   }
 
-  function isNextPageAviable() {
+  function isNextPageAvailable () {
     if (photosCollection.length <= PHOTO_NUMBER) {
       return false;
     }
@@ -127,7 +124,7 @@
   }
 
   function checkNextPage() {
-    if (isAtTheBottom() && isNextPageAviable()) {
+    if (isAtTheBottom() && isNextPageAvailable ()) {
       window.dispatchEvent(new CustomEvent('atthebottom'));
     }
   }

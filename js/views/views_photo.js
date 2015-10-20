@@ -14,6 +14,7 @@
    */
   var photoTemplate = document.getElementById('picture-template');
 
+  var photosPreview;
   /**
    * @constructor
    * @extends {Backbone.View}
@@ -22,7 +23,7 @@
 
     tagName: 'a',
 
-    className: 'pictures',
+    className: 'picture',
 
     initialize: function() {
       this._onPreviewLoad = this._onPreviewLoad.bind(this);
@@ -40,7 +41,7 @@
       this.el.querySelector('.picture-likes').textContent = this.model.get('likes');
 
       if(this.model.get('url')) {
-        var photosPreview = new Image();
+        photosPreview = new Image();
         photosPreview.src = this.model.get('url');
 
         this._imageLoadTimeout = setTimeout(function() {
@@ -53,20 +54,14 @@
       }
     },
 
-    unrender: function() {
-      this._el.parentNode.removeChild(this._el);
-      this._el.removeEventListener('click', this._onClick);
-      this._el = null;
-    },
-
     _onPreviewLoad: function() {
-          this.el.style.width = '182px';
-          this.el.style.height = '182px';
+      console.log(photosPreview);
+      this.el.style.width = '182px';
+      this.el.style.height = '182px';
 
-          var oldImage = this.el.getElementsByTagName('img')[0];
-          //this.el.replaceChild(photosPreview, oldImage);
-          
-          clearTimeout(this._imageLoadTimeout);
+      var oldImage = this.el.getElementsByTagName('img')[0];
+
+      clearTimeout(this._imageLoadTimeout);
     },
 
     _onPreviewFail: function() {
