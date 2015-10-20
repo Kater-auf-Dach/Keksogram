@@ -21,6 +21,7 @@
   var currentPictures;
   var currentPage;
   var gallery;
+  var renderedPhotos = [];
 
 
   filtersForm.classList.add('hidden');
@@ -31,8 +32,10 @@
     pageNumber = pageNumber || 0;
 
     if (replace) {
-      picturesContainer.classList.remove('picture-failure');
-      picturesContainer.innerHTML = '';
+      var photosForDelete;
+      while ((photosForDelete = renderedPhotos.shift())) {
+        photosForDelete.unrender();
+      }
     }
 
     var picturesFragment = document.createDocumentFragment();
@@ -44,7 +47,7 @@
     picturesForRender.forEach(function(picture, id) {
       var newPictureElement = new Photo(id, picture);
       newPictureElement.render(picturesFragment);
-
+      renderedPhotos.push(newPictureElement);
       setTimeout(checkNextPage, 10);
     });
 
@@ -189,8 +192,6 @@
   }
 
   function initGallery() {
-
-
     window.addEventListener('galleryclick', function(event) {
       if (!gallery) {
         gallery = new Gallery();
@@ -200,8 +201,8 @@
       }));
       gallery.setCurrentPhoto(event.detail.pictureElement.id);
       gallery.show();
-    })
-  };
+    });
+  }
 
   // Execute all this code
   initFilters();

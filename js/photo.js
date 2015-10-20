@@ -20,36 +20,39 @@
 
     container.appendChild(newPictureElement);
 
-    var picturesPreview = new Image();
-    picturesPreview.src = this._data['url'];
+    if(this._data['url']) {
+      var picturesPreview = new Image();
+      picturesPreview.src = this._data['url'];
 
-    var imageLoadTimeout = setTimeout(function() {
-      newPictureElement.classList.add('picture-load-failure');
-    }, REQUEST_FAILURE_TIMEOUT);
-
-    picturesPreview.onload = function() {
-      picturesPreview.style.width = '182px';
-      picturesPreview.style.height = '182px';
-
-      var oldImage = newPictureElement.getElementsByTagName('img')[0];
-
-      newPictureElement.replaceChild(picturesPreview, oldImage);
-      clearTimeout(imageLoadTimeout);
-    };
-
-    picturesPreview.onerror = function() {
-      newPictureElement.classList.add('picture-load-failure');
-    };
-
+      var imageLoadTimeout = setTimeout(function() {
+        newPictureElement.classList.add('picture-load-failure');
+      }, REQUEST_FAILURE_TIMEOUT);
+  
+      picturesPreview.onload = function() {
+        clearTimeout(imageLoadTimeout);
+        
+        picturesPreview.style.width = '182px';
+        picturesPreview.style.height = '182px';
+        
+        var oldImage = newPictureElement.getElementsByTagName('img')[0];
+        newPictureElement.replaceChild(picturesPreview, oldImage);
+      };
+  
+      picturesPreview.onerror = function() {
+        newPictureElement.classList.add('picture-load-failure');
+      };
+    }
+    
+    
     this._element = newPictureElement;
     this._element.addEventListener('click', this._onClick);
   };
 
-  //Photo.prototype.unrender = function() {
-  //  this._element.parentNode.removeChild(this._element);
-  //  this._element.removeEventListener('click', this._onClick);
-  //  this._element = null;
-  //};
+  Photo.prototype.unrender = function() {
+    this._element.parentNode.removeChild(this._element);
+    this._element.removeEventListener('click', this._onClick);
+    this._element = null;
+  };
 
   Photo.prototype._onClick = function(event) {
     event.preventDefault();
