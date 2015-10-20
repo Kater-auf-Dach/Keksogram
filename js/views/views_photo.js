@@ -60,6 +60,8 @@
       this.el.style.height = '182px';
 
       var oldImage = this.el.getElementsByTagName('img')[0];
+      oldImage.parentNode.insertBefore(photosPreview,oldImage);
+      oldImage.parentNode.removeChild(oldImage);
 
       clearTimeout(this._imageLoadTimeout);
     },
@@ -70,7 +72,7 @@
     
     _onClick: function() {
       event.preventDefault();
-      if (!this._el.classList.contains('picture-load-failure')) {
+      if (!this.el.classList.contains('picture-load-failure')) {
         this.trigger('galleryclick');
       }
     }
