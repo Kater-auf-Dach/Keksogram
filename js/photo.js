@@ -27,23 +27,23 @@
       var imageLoadTimeout = setTimeout(function() {
         newPictureElement.classList.add('picture-load-failure');
       }, REQUEST_FAILURE_TIMEOUT);
-  
+
       picturesPreview.onload = function() {
         clearTimeout(imageLoadTimeout);
-        
+
         picturesPreview.style.width = '182px';
         picturesPreview.style.height = '182px';
-        
+
         var oldImage = newPictureElement.getElementsByTagName('img')[0];
         newPictureElement.replaceChild(picturesPreview, oldImage);
       };
-  
+
       picturesPreview.onerror = function() {
         newPictureElement.classList.add('picture-load-failure');
       };
     }
-    
-    
+
+
     this._element = newPictureElement;
     this._element.addEventListener('click', this._onClick);
   };

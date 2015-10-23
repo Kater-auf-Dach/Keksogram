@@ -14,16 +14,15 @@
    */
   var photoTemplate = document.getElementById('picture-template');
 
-  var photosPreview;
+  var photoPreview;
   /**
    * @constructor
    * @extends {Backbone.View}
    */
   var PhotoView = Backbone.View.extend({
 
-    tagName: 'a',
-
-    className: 'picture',
+    // tagName: 'a',
+    // className: 'picture',
 
     initialize: function() {
       this._onPreviewLoad = this._onPreviewLoad.bind(this);
@@ -36,45 +35,58 @@
     },
 
     render: function() {
-      this.el.appendChild(photoTemplate.content.children[0].cloneNode(true));
+      //this.el.appendChild(photoTemplate.content.children[0].cloneNode(true));
       this.el.querySelector('.picture-comments').textContent = this.model.get('comments');
       this.el.querySelector('.picture-likes').textContent = this.model.get('likes');
 
       if(this.model.get('url')) {
-        photosPreview = new Image();
-        photosPreview.src = this.model.get('url');
+        photoPreview = new Image();
+        photoPreview.src = this.model.get('url');
 
         this._imageLoadTimeout = setTimeout(function() {
           this.el.classList.add('picture-load-failure');
         }.bind(this), REQUEST_FAILURE_TIMEOUT);
 
-        photosPreview.addEventListener('load', this._onPreviewLoad);
-        photosPreview.addEventListener('error', this._onPreviewFail);
-        photosPreview.addEventListener('abort', this._onPreviewFail);
+        photoPreview.addEventListener('load', this._onPreviewLoad());
+        photoPreview.addEventListener('error', this._onPreviewFail);
+        photoPreview.addEventListener('abort', this._onPreviewFail);
       }
     },
 
     _onPreviewLoad: function() {
-      console.log(photosPreview);
-      this.el.style.width = '182px';
-      this.el.style.height = '182px';
-
-      var oldImage = this.el.getElementsByTagName('img')[0];
-      oldImage.parentNode.insertBefore(photosPreview,oldImage);
-      oldImage.parentNode.removeChild(oldImage);
-
       clearTimeout(this._imageLoadTimeout);
+
+      photoPreview.width = 182;
+      photoPreview.height = 182;     
+
+      var oldPhoto = this.el.querySelector('img');
+      this.el.replaceChild(photoPreview, oldPhoto);
+
+      this.el.classList.remove('picture-load-failure');
+      this._cleanupPhotoListeners(photoPreview);
     },
 
     _onPreviewFail: function() {
-        this.el.classList.add('picture-load-failure');
+      clearTimeout(this._imageLoadTimeout);
+
+      //var failedPhoto = evt.path[0];
+      var failedPhoto = this.el;
+
+      this.el.classList.add('picture-load-failure');      
+      this._cleanupPhotoListeners(failedPhoto);
     },
     
-    _onClick: function() {
+    _onClick: function(event) {
       event.preventDefault();
       if (!this.el.classList.contains('picture-load-failure')) {
         this.trigger('galleryclick');
       }
+    },
+
+    _cleanupPhotoListeners: function(image) {
+      image.removeEventListener('load', this._onPreviewLoad);
+      image.removeEventListener('error', this._onPreviewFail);
+      image.removeEventListener('abort', this._onPreviewFail);
     }
 
   });

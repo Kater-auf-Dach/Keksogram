@@ -4,9 +4,10 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Open+Sans&subset=latin,cyrillic'
           rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
-    <script type="text/javascript" src="http://underscorejs.org/underscore.js"></script>
-    <script type="text/javascript" src="http://backbonejs.org/backbone.js"></script>
+    <script type="text/javascript" src="lib/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="lib/underscore-min.js"></script>
+    <script type="text/javascript" src="lib/backbone-min.js"></script>
+    <script type="text/javascript" src="lib/cookies.js"></script>
     <meta charset="utf-8">
     <title>Keksogram</title>
 </head>
@@ -82,26 +83,25 @@
 </div>
 
 <template id="picture-template">
-    <div>
-        <img src="" width="182" height="182">
-        <span class="picture-stats">
-          <span class="picture-stat picture-comments"></span>
-          <span class="picture-stat picture-likes"></span>
-        </span>
-    </div>
+  <a href="" class="picture">
+    <img src="" width="182" height="182">
+    <span class="picture-stats">
+      <span class="picture-stat picture-comments"></span>
+      <span class="picture-stat picture-likes"></span>
+    </span>
+  </a>
 </template>
 
-<script src="lib/cookies.js" charset="utf-8"></script>
 <script src="js/logo-background.js" charset="utf-8"></script>
 <script src="js/models/models_photo.js" charset="utf-8"></script>
 <script src="js/models/models_photos.js" charset="utf-8"></script>
 <script src="js/views/views_photo.js" charset="utf-8"></script>
+<script src="js/views/views_photo-preview.js"></script>
+<script src="js/gallery.js"></script>
 <script src="js/photos.js" charset="utf-8"></script>
-<!--<script src="js/gallery.js"></script>-->
-<!--<script src="js/resize-form.js" charset="utf-8"></script>-->
-<!--<script src="js/upload-form.js" charset="utf-8"></script>-->
-<!--<script src="js/filter-form.js" charset="utf-8"></script>-->
-<!--<script src="js/pictures.js"></script>-->
+<script src="js/resize-form.js" charset="utf-8"></script>
+<script src="js/upload-form.js" charset="utf-8"></script>
+<script src="js/filter-form.js" charset="utf-8"></script>
 
 </body>
 </html>

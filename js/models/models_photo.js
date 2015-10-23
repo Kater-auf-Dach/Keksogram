@@ -7,7 +7,10 @@
    */
 
   var PhotoModel = Backbone.Model.extend({
-    //initialize: function() { ... },
+    initialize: function() {
+
+  },
+
   });
 
   window.PhotoModel = PhotoModel;

@@ -161,7 +161,7 @@
     currentPage = 0;
     showPictures(currentPictures, currentPage, true);
   }
-  function isNextPageAviable() {
+  function isNextPageAvailable() {
     if (currentPictures.length <= PHOTO_NUMBER) {
       return false;
     }
@@ -174,7 +174,7 @@
   }
 
   function checkNextPage() {
-    if (isAtTheBottom() && isNextPageAviable()) {
+    if (isAtTheBottom() && isNextPageAvailable()) {
       window.dispatchEvent(new CustomEvent('atthebottom'));
     }
   }
@@ -207,7 +207,6 @@
   // Execute all this code
   initFilters();
   initScroll();
-  initGallery();
 
   loadPictures(function(loadedPictures) {
     pictures = loadedPictures;

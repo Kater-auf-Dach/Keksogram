@@ -10,6 +10,7 @@
   var currentPage;
 
   var photosCollection = new PhotosCollection();
+  var gallery = new Gallery();
 
   var initiallyLoaded = [];
   var renderedViews = [];
@@ -17,7 +18,11 @@
   filtersForm.classList.add('hidden');
 
   function renderPhotos(pageNumber, replace) {
+    replace = typeof replace !== 'undefined' ? replace : true;
+    pageNumber = pageNumber || 0;
+
     var fragment = document.createDocumentFragment();
+    var photoTemplate = document.getElementById('picture-template');
 
     var photosFrom = pageNumber * PHOTO_NUMBER;
     var photosTo = photosFrom + PHOTO_NUMBER;
@@ -26,16 +31,25 @@
       while (renderedViews.length) {
         var viewForRemove = renderedViews.shift();
         photosContainer.removeChild(viewForRemove.el);
+        viewForRemove.off('galleryclick');
         viewForRemove.remove();
       }
     }
 
     photosCollection.slice(photosFrom, photosTo).forEach(function(model) {
-      var view = new PhotoView({ model: model });
+      var view = new PhotoView({ 
+        model: model, 
+        el: photoTemplate.content.children[0].cloneNode(true) 
+      });
       view.render();
       fragment.appendChild(view.el);
       filtersForm.classList.remove('hidden');
       renderedViews.push(view);
+      view.on('galleryclick', function() {
+        gallery.setPhotos(photosCollection);
+        gallery.showPhoto(view.model);
+        gallery.show();
+      });
       setTimeout(checkNextPage, 10);
     });
 
@@ -146,5 +160,7 @@
     initFilters();
     initScroll();
     setActiveFilter(localStorage.getItem('filterValue') || 'popular');
-  }).fail(showLoadFailure());
+  }).fail(function() {
+    showLoadFailure()
+  });
 })();
