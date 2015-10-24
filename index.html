@@ -72,13 +72,12 @@
 <div class="pictures"></div>
 
 <div class="gallery-overlay invisible">
-    <span class="gallery-overlay-close">&times;</span>
-    <div class="gallery-overlay-preview">
-        <img src="" class="gallery-overlay-image" alt="" />
-            <div class="gallery-overlay-controls">
-              <div class="gallery-overlay-controls-like">Нравится <span class="likes-count">0</span></div>
-              <div class="gallery-overlay-controls-comments"><span class="comments-count">125</span> комментариев</div>
-            </div>
+  <span class="gallery-overlay-close">&times;</span>
+  <div class="gallery-overlay-preview">
+    <img src="" class="gallery-overlay-image" alt="" />
+    <div class="gallery-overlay-controls">
+      <div class="gallery-overlay-controls-like">Нравится <span class="likes-count">0</span></div>
+      <div class="gallery-overlay-controls-comments"><span class="comments-count">125</span> комментариев</div>
     </div>
 </div>
 
@@ -93,12 +92,24 @@
 </template>
 
 <script src="js/logo-background.js" charset="utf-8"></script>
+<<<<<<< HEAD
 <script src="js/models/models_photo.js" charset="utf-8"></script>
 <script src="js/models/models_photos.js" charset="utf-8"></script>
 <script src="js/views/views_photo.js" charset="utf-8"></script>
 <script src="js/views/views_photo-preview.js"></script>
 <script src="js/gallery.js"></script>
 <script src="js/photos.js" charset="utf-8"></script>
+=======
+<script>
+  /**
+   * Объект Resizer находится в глобальной области видимости, чтобы разные
+   * формы могли использовать его независимо друг от друга.
+   * @type {Resizer}
+   */
+  var resizer;
+</script>
+<script src="js/resize-picture.js" charset="utf-8"></script>
+>>>>>>> upstream-1.9/master
 <script src="js/resize-form.js" charset="utf-8"></script>
 <script src="js/upload-form.js" charset="utf-8"></script>
 <script src="js/filter-form.js" charset="utf-8"></script>

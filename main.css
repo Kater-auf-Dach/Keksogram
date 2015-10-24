@@ -6,6 +6,7 @@ body {
 
 html {
   background: #232321;
+  height: 100%;
 }
 
 html.inline-element {
@@ -15,6 +16,9 @@ html.inline-element {
 body {
   color: #ffe753;
   font: 14px 'Open Sans', Arial, sans-serif;
+  min-height: 100%;
+  min-width: 980px;
+  position: relative;
 }
 
 .invisible {
