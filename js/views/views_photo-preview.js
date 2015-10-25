@@ -3,9 +3,6 @@
 
 (function() {
   var GalleryView = Backbone.View.extend({
-    initialize: function() {
-      this._onClick = this._onClick.bind(this);
-    },
 
     events: {
       'click .gallery-overlay-image': '_onClick'

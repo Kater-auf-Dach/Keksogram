@@ -36,18 +36,16 @@
       }
     }
 
-    photosCollection.slice(photosFrom, photosTo).forEach(function(model) {
-      var view = new PhotoView({ 
-        model: model, 
-        el: photoTemplate.content.children[0].cloneNode(true) 
-      });
+    photosCollection.slice(photosFrom, photosTo).forEach(function(photoModelItem) {
+      var view = new PhotoView({ model: photoModelItem });
+      view.setElement(photoTemplate.content.children[0].cloneNode(true));
       view.render();
       fragment.appendChild(view.el);
       filtersForm.classList.remove('hidden');
       renderedViews.push(view);
       view.on('galleryclick', function() {
-        gallery.setPhotos(photosCollection);
-        gallery.showPhoto(view.model);
+        //gallery.setPhotos(photosCollection);
+        //gallery.showPhoto(view.model);
         gallery.show();
       });
       setTimeout(checkNextPage, 10);
