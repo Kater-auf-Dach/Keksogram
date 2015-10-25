@@ -2,21 +2,39 @@
 'use strict';
 
 (function() {
+
+  /** @const {number} */
   var REQUEST_FAILURE_TIMEOUT = 10000;
+
+  /** @const {number} */
   var PHOTO_NUMBER = 12;
 
+  /** @type {Element} */
   var filtersForm = document.querySelector('.filters');
+
+  /** @type {Element} */
   var photosContainer = document.querySelector('.pictures');
+
   var currentPage;
 
+  /** @type {PhotosCollection} */
   var photosCollection = new PhotosCollection();
+
+  /** @type {Gallery} */
   var gallery = new Gallery();
 
+  /** @type {Array.<Object>} */
   var initiallyLoaded = [];
+
+  /** @type {Array.<PhotoView>} */
   var renderedViews = [];
 
   filtersForm.classList.add('hidden');
 
+  /**
+   * @param {number} pageNumber
+   * @param {boolean=} replace
+   */
   function renderPhotos(pageNumber, replace) {
     replace = typeof replace !== 'undefined' ? replace : true;
     pageNumber = pageNumber || 0;
@@ -44,8 +62,8 @@
       filtersForm.classList.remove('hidden');
       renderedViews.push(view);
       view.on('galleryclick', function() {
-        //gallery.setPhotos(photosCollection);
-        //gallery.showPhoto(view.model);
+        gallery.setPhotos(photosCollection);
+        gallery.setCurrentPhoto(view.model);
         gallery.show();
       });
       setTimeout(checkNextPage, 10);
@@ -55,7 +73,11 @@
     filtersForm.classList.remove('hidden');
   }
 
-  // Set the filters for a photos
+  /**
+   * Set the filters for a photos
+   * @param {string} sortValue
+   * @return {Array.<Object>}
+   */
   function filterPhotos(sortValue) {
     var filteredPhotos = initiallyLoaded.slice(0);
     switch (sortValue) {
@@ -112,6 +134,7 @@
     });
   }
 
+  /** @param {string} sortValue */
   function setActiveFilter(sortValue) {
     document.getElementById('filter-' + sortValue).checked = true;
     filterPhotos(sortValue);
@@ -123,6 +146,9 @@
     photosContainer.classList.add('pictures-failure');
   }
 
+  /**
+   * @returns {boolean}
+   */
   function isNextPageAvailable () {
     if (photosCollection.length <= PHOTO_NUMBER) {
       return false;
@@ -130,6 +156,9 @@
     return currentPage < Math.ceil(photosCollection.length / PHOTO_NUMBER);
   }
 
+  /**
+   * @returns {boolean}
+   */
   function isAtTheBottom() {
     var BOTTOM_GAP = 100;
     return photosContainer.getBoundingClientRect().bottom - BOTTOM_GAP <= window.innerHeight;

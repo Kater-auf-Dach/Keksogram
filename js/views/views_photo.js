@@ -3,30 +3,28 @@
 'use strict';
 (function() {
 
-  /**
-   * @const
-   * @type {number}
-   */
+  /** @const {number} */
   var REQUEST_FAILURE_TIMEOUT = 10000;
-var photoTemplate = document.getElementById('picture-template');
+
   /**
    * @constructor
    * @extends {Backbone.View}
    */
   var PhotoView = Backbone.View.extend({
-
+    /** @override */
     initialize: function() {
       this._onPreviewLoad = this._onPreviewLoad.bind(this);
       this._onPreviewFail = this._onPreviewFail.bind(this);
       this._onClick = this._onClick.bind(this);
     },
 
+    /** @type {Object.<string, string>} */
     events: {
       'click': '_onClick'
     },
 
+    /** @override */
     render: function() {
-      //this.el = photoTemplate.content.children[0].cloneNode(true)
       this.el.querySelector('.picture-comments').textContent = this.model.get('comments');
       this.el.querySelector('.picture-likes').textContent = this.model.get('likes');
 
@@ -44,6 +42,10 @@ var photoTemplate = document.getElementById('picture-template');
       }
     },
 
+    /**
+     * @param {Event} event
+     * @private
+     */
     _onPreviewLoad: function(event) {
       var loadedPhoto = event.target;
 
@@ -58,6 +60,10 @@ var photoTemplate = document.getElementById('picture-template');
       clearTimeout(this._imageLoadTimeout);
     },
 
+    /**
+     * @param {Event} event
+     * @private
+     */
     _onPreviewFail: function(event) {
       clearTimeout(this._imageLoadTimeout);
       var failedPhoto = event.target;
@@ -65,6 +71,10 @@ var photoTemplate = document.getElementById('picture-template');
       this._cleanupPhotoListeners(failedPhoto);
     },
 
+    /**
+     * @param {MouseEvent} event
+     * @private
+     */
     _onClick: function(event) {
       event.preventDefault();
       if (!this.el.classList.contains('picture-load-failure')) {
@@ -72,6 +82,10 @@ var photoTemplate = document.getElementById('picture-template');
       }
     },
 
+    /**
+     * @param {Image} photo
+     * @private
+     */
     _cleanupPhotoListeners: function(photo) {
       photo.removeEventListener('load', this._onPreviewLoad);
       photo.removeEventListener('error', this._onPreviewFail);

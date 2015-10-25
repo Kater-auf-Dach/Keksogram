@@ -1,4 +1,4 @@
-/* global Backbone, PhotoModel */
+/* global PhotoModel */
 'use strict';
 
 (function() {
