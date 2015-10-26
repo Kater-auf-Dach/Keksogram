@@ -20,7 +20,7 @@
 
     container.appendChild(newPictureElement);
 
-    if(this._data['url']) {
+    if (this._data['url']) {
       var picturesPreview = new Image();
       picturesPreview.src = this._data['url'];
 

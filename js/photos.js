@@ -1,4 +1,4 @@
-/* global PhotoModel, PhotoView, PhotosCollection */
+/* global PhotoView, PhotosCollection, Gallery */
 'use strict';
 
 (function() {
@@ -150,7 +150,7 @@
   /**
    * @returns {boolean}
    */
-  function isNextPageAvailable () {
+  function isNextPageAvailable() {
     if (photosCollection.length <= PHOTO_NUMBER) {
       return false;
     }
@@ -166,7 +166,7 @@
   }
 
   function checkNextPage() {
-    if (isAtTheBottom() && isNextPageAvailable ()) {
+    if (isAtTheBottom() && isNextPageAvailable()) {
       window.dispatchEvent(new CustomEvent('atthebottom'));
     }
   }
@@ -189,6 +189,6 @@
     initScroll();
     setActiveFilter(localStorage.getItem('filterValue') || 'popular');
   }).fail(function() {
-    showLoadFailure()
+    showLoadFailure();
   });
 })();

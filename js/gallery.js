@@ -1,4 +1,4 @@
-/* global Backbone*/
+/* global Backbone GalleryView */
 'use strict';
 
 (function() {
@@ -97,7 +97,6 @@
    * @private
    */
   Gallery.prototype._onPhotoClick = function() {
-        console.log(this);
     this.setCurrentPhoto(this._currentPhoto + 1);
     this._showCurrentPhoto();
   };

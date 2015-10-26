@@ -30,7 +30,7 @@
       this.el.querySelector('.picture-comments').textContent = this.model.get('comments');
       this.el.querySelector('.picture-likes').textContent = this.model.get('likes');
 
-      if(this.model.get('url')) {
+      if (this.model.get('url')) {
         var photoPreview = new Image();
         photoPreview.src = this.model.get('url');
 

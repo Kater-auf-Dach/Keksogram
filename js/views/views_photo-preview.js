@@ -36,7 +36,7 @@
         this.model.dislike();
       } else {
         this.model.like();
-      };
+      }
       this.render();
     }
 
