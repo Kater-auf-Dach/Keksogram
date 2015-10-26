@@ -15,6 +15,7 @@
   /** @type {Element} */
   var photosContainer = document.querySelector('.pictures');
 
+  /** @type {number} */
   var currentPage;
 
   /** @type {PhotosCollection} */

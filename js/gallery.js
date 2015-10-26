@@ -58,6 +58,8 @@
 
 
   Gallery.prototype.show = function() {
+
+    // Fix event handlers's context
     this._galleryOverlay.classList.remove('invisible');
     this._photoContainer.addEventListener('click', this._onPhotoClick);
     this._buttonClose.addEventListener('click', this._onCloseClick);
