@@ -13,6 +13,16 @@
   };
 
   /**
+   * @param value
+   * @param min
+   * @param max
+   * @returns {number}
+   */
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  /**
    * @constructor
    */
   var Gallery = function() {
@@ -20,8 +30,10 @@
 
     this._galleryOverlay = document.querySelector('.gallery-overlay');
     this._photoContainer = this._galleryOverlay.querySelector('.gallery-overlay-preview');
+    this._photo = this._galleryOverlay.querySelector('img');
     this._buttonClose = this._galleryOverlay.querySelector('.gallery-overlay-close');
 
+    // Fix event handlers's context
     this._onPhotoClick = this._onPhotoClick.bind(this);
     this._onCloseClick = this._onCloseClick.bind(this);
     this._onDocumentKeyDown = this._onDocumentKeyDown.bind(this);
@@ -29,7 +41,7 @@
 
 
   /**
-   * @param photos
+   * @param {Collection} photos
    */
   Gallery.prototype.setPhotos = function(photos) {
     this._photos = photos;
@@ -39,14 +51,17 @@
    * @param index
    */
   Gallery.prototype.setCurrentPhoto = function(index) {
-    this._currentPhoto = this._photos.indexOf(index);
+    index = clamp(index, 0, this._photos.length - 1);
+    if (this._currentPhoto === index) {
+      return;
+    }
+    this._currentPhoto = index;
   };
 
   /**
    * @private
    */
   Gallery.prototype._showCurrentPhoto = function() {
-    console.log(this._currentPhoto);
 
     /**
      * @type {*|GalleryView}
@@ -59,9 +74,8 @@
 
   Gallery.prototype.show = function() {
 
-    // Fix event handlers's context
     this._galleryOverlay.classList.remove('invisible');
-    this._photoContainer.addEventListener('click', this._onPhotoClick);
+    this._photo.addEventListener('click', this._onPhotoClick);
     this._buttonClose.addEventListener('click', this._onCloseClick);
     document.body.addEventListener('keydown', this._onDocumentKeyDown);
 
@@ -70,11 +84,10 @@
 
   Gallery.prototype.hide = function() {
     this._galleryOverlay.classList.add('invisible');
-    this._photoContainer.removeEventListener('click', this._onPhotoClick);
+    this._photo.removeEventListener('click', this._onPhotoClick);
     this._buttonClose.removeEventListener('click', this._onCloseClick);
     document.body.removeEventListener('keydown', this._onDocumentKeyDown);
 
-    this._photos.reset();
     this._currentPhoto = 0;
   };
 
@@ -84,6 +97,7 @@
    * @private
    */
   Gallery.prototype._onPhotoClick = function() {
+        console.log(this);
     this.setCurrentPhoto(this._currentPhoto + 1);
     this._showCurrentPhoto();
   };

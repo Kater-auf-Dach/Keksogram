@@ -64,7 +64,7 @@
       renderedViews.push(view);
       view.on('galleryclick', function() {
         gallery.setPhotos(photosCollection);
-        gallery.setCurrentPhoto(view.model);
+        gallery.setCurrentPhoto(photosCollection.models.indexOf(view.model));
         gallery.show();
       });
       setTimeout(checkNextPage, 10);

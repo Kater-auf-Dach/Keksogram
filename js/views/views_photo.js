@@ -13,6 +13,8 @@
   var PhotoView = Backbone.View.extend({
     /** @override */
     initialize: function() {
+
+      // Fix event handlers's context
       this._onPreviewLoad = this._onPreviewLoad.bind(this);
       this._onPreviewFail = this._onPreviewFail.bind(this);
       this._onClick = this._onClick.bind(this);
