@@ -26,17 +26,23 @@
       this.el.querySelector('.comments-count').textContent = this.model.get('comments');
     },
 
+    _toggleLike: function() {
+      if (this.model.get('liked')) {
+        this.model.dislike();
+        this.el.querySelector('.likes-count').classList.remove('likes-count-liked');
+      } else {
+        this.model.like();
+        this.el.querySelector('.likes-count').classList.add('likes-count-liked');
+      }
+    },
+
     /**
      * @param {MouseEvent} event
      * @private
      */
     _onLikeClick: function(event) {
       event.preventDefault();
-      if (this.model.get('liked')) {
-        this.model.dislike();
-      } else {
-        this.model.like();
-      }
+      this._toggleLike();
       this.render();
     }
 
