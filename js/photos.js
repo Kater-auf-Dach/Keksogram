@@ -115,7 +115,26 @@
         break;
     }
     photosCollection.reset(filteredPhotos);
-    localStorage.setItem('filterValue', sortValue);
+    //localStorage.setItem('filterValue', sortValue);
+  }
+
+  function parseURL() {
+    var hashValue = location.hash;
+    var filterName = hashValue.match(/^#filters\/(\S+)$/);
+    if (filterName) {
+      setActiveFilter(filterName[1] || 'popular');
+    }
+    else {
+      setActiveFilter(localStorage.getItem('filterValue') || 'popular');
+    }
+    //if (filterName) {
+    //  filterPhotos(filterName);
+    //}
+    //if (filterName == null) {
+    //  filterPhotos('popular');
+    //}
+
+    //setActiveFilter(filterName);
   }
 
 
@@ -125,15 +144,17 @@
     filtersContainer.addEventListener('click', function(event) {
       var clickedFilter = event.target;
 
-      while (clickedFilter !== filtersContainer) {
-        if (clickedFilter.classList.contains('filters-radio')) {
-          setActiveFilter(clickedFilter.value);
-          return;
-        }
-        clickedFilter = clickedFilter.parentElement;
-      }
+      //while (clickedFilter !== filtersContainer) {
+      //  if (clickedFilter.classList.contains('filters-radio')) {
+      //    location.hash = 'filters/' + clickedFilter.value;
+      //    return;
+      //  }
+      //  clickedFilter = clickedFilter.parentElement;
+      //}
+      location.hash = 'filters/' + clickedFilter.value;
     });
   }
+
 
   /** @param {string} sortValue */
   function setActiveFilter(sortValue) {
@@ -185,9 +206,13 @@
 
   photosCollection.fetch({ timeout: REQUEST_FAILURE_TIMEOUT }).success(function(loaded, state, jqXHR) {
     initiallyLoaded = jqXHR.responseJSON;
+    window.addEventListener('hashchange', function () {
+      parseURL();
+    });
     initFilters();
     initScroll();
-    setActiveFilter(localStorage.getItem('filterValue') || 'popular');
+    parseURL();
+    //setActiveFilter(localStorage.getItem('filterValue') || 'popular');
   }).fail(function() {
     showLoadFailure();
   });
