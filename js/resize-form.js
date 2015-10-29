@@ -1,15 +1,15 @@
 'use strict';
 
-define(['upload-form'], function() {
+define(['resize-picture'], function(Resizer) {
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
   var filterForm = document.forms['upload-filter'];
 
-  var previewImage = resizeForm.querySelector('.resize-image-preview');
+  //var previewImage = resizeForm.querySelector('.resize-image-preview');
   var prevButton = resizeForm['resize-prev'];
 
-  prevButton.onclick = function(evt) {
-    evt.preventDefault();
+  prevButton.onclick = function(event) {
+    event.preventDefault();
 
     resizeForm.reset();
     uploadForm.reset();
@@ -17,8 +17,8 @@ define(['upload-form'], function() {
     uploadForm.classList.remove('invisible');
   };
 
-  resizeForm.onsubmit = function(evt) {
-    evt.preventDefault();
+  resizeForm.onsubmit = function(event) {
+    event.preventDefault();
     var resizeImage = resizer.exportImage();
     filterForm.elements['filter-image-src'] = resizeImage.src;
 

@@ -1,8 +1,6 @@
 'use strict';
 
 define(['resize-picture'], function(Resizer) {
-  var resizer;
-
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
   var filterForm = document.forms['upload-filter'];
@@ -11,8 +9,8 @@ define(['resize-picture'], function(Resizer) {
 
   function uploadImage(element, callback) {
     var fileReader = new FileReader();
-    fileReader.onload = function(evt) {
-      var image = evt.target.result;
+    fileReader.onload = function(event) {
+      var image = event.target.result;
       callback(image);
     };
 
@@ -25,15 +23,15 @@ define(['resize-picture'], function(Resizer) {
     }
   };
 
-  uploadForm.onsubmit = function(evt) {
-    evt.preventDefault();
+  uploadForm.onsubmit = function(event) {
+    event.preventDefault();
 
     uploadImage(fileElement, function(image) {
       sessionStorage.setItem('uploaded-image', image);
       resizeForm.querySelector('.resize-image-preview').src = image;
       filterForm.querySelector('.filter-image-preview').src = image;
 
-      resizer = new Resizer();
+      var resizer = new Resizer();
       resizer.setElement(resizeForm);
 
       uploadForm.classList.add('invisible');
