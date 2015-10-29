@@ -1,17 +1,17 @@
-/* global PhotoModel */
+/*global Backbone */
 'use strict';
 
-(function() {
+define(['models/models_photo'], function(PhotoModel) {
+
   /**
    * @constructor
    * @param {Object} attributes
    * @param {Object} options
    */
-
   var PhotosCollection = Backbone.Collection.extend({
     model: PhotoModel,
     url: 'data/pictures.json'
   });
 
-  window.PhotosCollection = PhotosCollection;
-})();
+  return PhotosCollection;
+});

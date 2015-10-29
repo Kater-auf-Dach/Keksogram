@@ -1,8 +1,7 @@
-/* global Backbone GalleryView */
+/*global Backbone */
 'use strict';
 
-(function() {
-
+define(['views/views_photo-preview'], function(GalleryView) {
   /**
    * @enum {number}
    */
@@ -133,5 +132,5 @@
     }
   };
 
-  window.Gallery = Gallery;
-})();
+  return Gallery;
+});

@@ -1,6 +1,7 @@
+/*global Backbone */
 'use strict';
 
-(function() {
+define(function() {
 
   /**
    * @constructor
@@ -24,5 +25,5 @@
     }
   });
 
-  window.PhotoModel = PhotoModel;
-})();
+  return PhotoModel;
+});

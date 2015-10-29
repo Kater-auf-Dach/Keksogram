@@ -1,7 +1,7 @@
-/* global Backbone */
+/*global Backbone */
 'use strict';
 
-(function() {
+define(function() {
   /**
    * @constructor
    * @extends {Backbone.View}
@@ -48,5 +48,5 @@
 
   });
 
-  window.GalleryView = GalleryView;
-})();
+  return GalleryView;
+});

@@ -1,7 +1,7 @@
-/* global Backbone */
-
+/*global Backbone */
 'use strict';
-(function() {
+
+define(function() {
 
   /** @const {number} */
   var REQUEST_FAILURE_TIMEOUT = 10000;
@@ -96,6 +96,6 @@
 
   });
 
-  window.PhotoView = PhotoView;
+  return PhotoView;
 
-})();
+});

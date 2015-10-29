@@ -1,8 +1,24 @@
-/* global PhotoView, PhotosCollection, Gallery */
+/*global Backbone */
 'use strict';
 
-(function() {
+require.config({
+  baseUrl: 'js'
+});
 
+define([
+  'models/models_photo',
+  'models/models_photos',
+  'views/views_photo',
+  //'views/views_photo-preview',
+  'gallery',
+
+  //'resize-pictures',
+  'resize-form',
+  'upload-form',
+  'filter-form',
+  'logo-background'
+],
+function(PhotoModel, PhotosCollection, PhotoView, Gallery) {
   /** @const {number} */
   var REQUEST_FAILURE_TIMEOUT = 10000;
 
@@ -122,19 +138,12 @@
     var hashValue = location.hash;
     var filterName = hashValue.match(/^#filters\/(\S+)$/);
     if (filterName) {
-      setActiveFilter(filterName[1] || 'popular');
+      setActiveFilter(filterName[1]);
     }
     else {
-      setActiveFilter(localStorage.getItem('filterValue') || 'popular');
+      setActiveFilter('popular');
+      // setActiveFilter(localStorage.getItem('filterValue') || 'popular');
     }
-    //if (filterName) {
-    //  filterPhotos(filterName);
-    //}
-    //if (filterName == null) {
-    //  filterPhotos('popular');
-    //}
-
-    //setActiveFilter(filterName);
   }
 
 
@@ -212,8 +221,8 @@
     initFilters();
     initScroll();
     parseURL();
-    //setActiveFilter(localStorage.getItem('filterValue') || 'popular');
   }).fail(function() {
     showLoadFailure();
   });
-})();
+
+});
