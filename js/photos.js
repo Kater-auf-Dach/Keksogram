@@ -138,6 +138,7 @@ function(PhotoModel, PhotosCollection, PhotoView, Gallery) {
     var hashValue = location.hash;
     var filterName = hashValue.match(/^#filters\/(\S+)$/);
     if (filterName) {
+      console.log(filterName)
       setActiveFilter(filterName[1]);
     }
     else {
@@ -153,20 +154,21 @@ function(PhotoModel, PhotosCollection, PhotoView, Gallery) {
     filtersContainer.addEventListener('click', function(event) {
       var clickedFilter = event.target;
 
-      //while (clickedFilter !== filtersContainer) {
-      //  if (clickedFilter.classList.contains('filters-radio')) {
-      //    location.hash = 'filters/' + clickedFilter.value;
-      //    return;
-      //  }
-      //  clickedFilter = clickedFilter.parentElement;
-      //}
-      location.hash = 'filters/' + clickedFilter.value;
+      while (clickedFilter !== filtersContainer) {
+        if (clickedFilter.classList.contains('filters-radio')) {
+          window.location.hash = 'filters/' + clickedFilter.value;
+          return;
+        }
+        clickedFilter = clickedFilter.parentElement;
+      }
+      //location.hash = 'filters/' + clickedFilter.value;
     });
   }
 
 
   /** @param {string} sortValue */
   function setActiveFilter(sortValue) {
+    debugger;
     document.getElementById('filter-' + sortValue).checked = true;
     filterPhotos(sortValue);
     currentPage = 0;
