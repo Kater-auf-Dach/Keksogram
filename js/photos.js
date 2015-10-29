@@ -11,7 +11,7 @@ define([
   'views/views_photo',
   'gallery',
 
-  //'resize-pictures',
+  'resize-pictures',
   'resize-form',
   'upload-form',
   'filter-form',

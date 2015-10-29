@@ -1,6 +1,6 @@
 'use strict';
 
-define(function() {
+define(['upload-form'], function() {
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
   var filterForm = document.forms['upload-filter'];
