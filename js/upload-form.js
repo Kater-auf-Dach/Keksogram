@@ -4,7 +4,7 @@ define(['resize-picture'], function(Resizer) {
   /**
   * @type {Resizer}
   */
-  var resizer;
+  //var resizer;
 
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
@@ -32,10 +32,12 @@ define(['resize-picture'], function(Resizer) {
     event.preventDefault();
 
     uploadImage(fileElement, function(image) {
-      sessionStorage.setItem('uploaded-image', image);
-      resizeForm.querySelector('.resize-image-preview').src = image;
-      filterForm.querySelector('.filter-image-preview').src = image;
-
+      //sessionStorage.setItem('uploaded-image', image);
+      //resizeForm.querySelector('.resize-image-preview').src = image;
+      //filterForm.querySelector('.filter-image-preview').src = image;
+      if (resizer) {
+        resizer.remove();
+      }
       resizer = new Resizer(image);
       resizer.setElement(resizeForm);
 

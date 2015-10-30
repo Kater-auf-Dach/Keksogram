@@ -41,6 +41,7 @@ define(function() {
           side);
 
       // Отрисовка изначального состояния канваса.
+      this.setConstraint();
       this.redraw();
     }.bind(this);
 
@@ -100,6 +101,7 @@ define(function() {
       // кадрирования. Координаты задаются от центра.
       //
       this._ctx.strokeStyle = '#ffe753';
+      this._ctx.fillStyle = '000';
       this._ctx.lineWidth = 6;
       this._ctx.setLineDash([15, 10]);
       this._ctx.strokeRect(-this._resizeConstraint.side / 2, -this._resizeConstraint.side / 2, this._resizeConstraint.side, this._resizeConstraint.side);
@@ -198,6 +200,15 @@ define(function() {
     getConstraint: function() {
       return this._resizeConstraint;
     },
+
+    getCropWidth: function() {
+      return this._container.width;
+    },
+
+    getCropHeight: function() {
+      return this._container.height;
+    },
+
 
     /**
      * Смещает кадрирование на значение указанное в параметрах.

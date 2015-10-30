@@ -93,5 +93,13 @@
 
 
 <script data-main="js/photos.js" src="lib/require.js"></script>
+    <script>
+        /**
+         * Объект Resizer находится в глобальной области видимости, чтобы разные
+         * формы могли использовать его независимо друг от друга.
+         * @type {Resizer}
+         */
+        var resizer;
+    </script>
 </body>
 </html>
