@@ -5,17 +5,15 @@ define(['resize-picture'], function(Resizer) {
   var uploadForm = document.forms['upload-select-image'];
   var resizeForm = document.forms['upload-resize'];
   var filterForm = document.forms['upload-filter'];
-
   var previewImage = resizeForm.querySelector('.resize-image-preview');
   var prevButton = resizeForm['resize-prev'];
 
-//
   var resizeFormX = resizeForm['resize-x'];
   var resizeFormY = resizeForm['resize-y'];
   var resizeSide  = resizeForm['resize-size'];
 
-  resizeFormX.min = 50;
-  resizeFormY.min = 50;
+  resizeFormX.min = 0;
+  resizeFormY.min = 0;
   resizeSide.min  = 50;
 
 
@@ -31,13 +29,26 @@ define(['resize-picture'], function(Resizer) {
   resizeSide.onchange = function() {
     resizeFormX.max = resizeSide.value;
     resizeFormY.max = resizeSide.value;
-    resizer.setConstraint(resizeFormX.value, resizeFormY.value, resizeSide.value);
+
+    var moveDiff = (resizeSide.value - resizer.getConstraint().side) / 2;
+    var a = resizer.getConstraint().x - moveDiff;
+    var b = resizer.getConstraint().y - moveDiff;
+    resizer.setConstraint(a, b, resizeSide.value);
+  };
+
+  resizeFormX.onchange = function() {
+    //console.log(resizeFormX.value);
+    resizer.setConstraint(resizeFormX.value)
+  };
+
+  resizeFormY.onchange = function() {
+    //console.log(resizeFormY.value);
+    resizer.setConstraint(resizeFormX.value, resizeFormY.value, resizeSide.value)
   };
 
 //
   prevButton.onclick = function(event) {
     event.preventDefault();
-
     resizeForm.reset();
     uploadForm.reset();
     resizeForm.classList.add('invisible');
@@ -46,19 +57,18 @@ define(['resize-picture'], function(Resizer) {
 
   resizeForm.onsubmit = function(event) {
     event.preventDefault();
-    var resizeImage = resizer.exportImage();
-    filterForm.elements['filter-image-src'] = resizeImage.src;
-
+    filterForm.elements['filter-image-src'] = previewImage.src;
+    filterForm.querySelector('.filter-image-preview').src = resizer.exportImage().src;
     resizeForm.classList.add('invisible');
     filterForm.classList.remove('invisible');
   };
 
- window.addEventListener('resizerchange', function() {
-   var photoConstraint = resizer.getConstraint();
-   resizeFormX.value = Math.floor(photoConstraint.x);
-   resizeFormY.value = Math.floor(photoConstraint.y);
-   resizeSide.value = Math.floor(photoConstraint.side);
-   //resizer.setConstraint(resizeFormX.value, resizeFormY.value, resizeSide.value);
- })
+  window.addEventListener('resizerchange', function() {
+    console.log(resizeFormX.value, resizeFormY.value, resizeSide.value);
+    var photoConstraint = resizer.getConstraint();
+    resizeFormX.value = Math.floor(photoConstraint.x);
+    resizeFormY.value = Math.floor(photoConstraint.y);
+    resizeSide.value = Math.floor(photoConstraint.side);
+  })
 
 });

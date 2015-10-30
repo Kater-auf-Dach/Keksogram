@@ -201,15 +201,6 @@ define(function() {
       return this._resizeConstraint;
     },
 
-    getCropWidth: function() {
-      return this._container.width;
-    },
-
-    getCropHeight: function() {
-      return this._container.height;
-    },
-
-
     /**
      * Смещает кадрирование на значение указанное в параметрах.
      * @param {number} deltaX
@@ -229,11 +220,13 @@ define(function() {
      * @param {number} side
      */
     setConstraint: function(x, y, side) {
-      if (typeof x !== 'undefined') {
+      var moveX = x +  this._resizeConstraint.side;
+      var moveY = y +  this._resizeConstraint.side;
+      if ((typeof x !== 'undefined') && (x >= 0) && (moveX <= this._container.width)) {
         this._resizeConstraint.x = x;
       }
 
-      if (typeof y !== 'undefined') {
+      if ((typeof y !== 'undefined') && (y >= 0) && (moveY <= this._container.width)) {
         this._resizeConstraint.y = y;
       }
 
