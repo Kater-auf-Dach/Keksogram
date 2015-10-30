@@ -18,6 +18,7 @@ define(function() {
       this._onPreviewLoad = this._onPreviewLoad.bind(this);
       this._onPreviewFail = this._onPreviewFail.bind(this);
       this._onClick = this._onClick.bind(this);
+      this._getSrc = this._getSrc.bind(this);
     },
 
     /** @type {Object.<string, string>} */
@@ -29,19 +30,28 @@ define(function() {
     render: function() {
       this.el.querySelector('.picture-comments').textContent = this.model.get('comments');
       this.el.querySelector('.picture-likes').textContent = this.model.get('likes');
+      this._getSrc();
+    },
 
-      if (this.model.get('url')) {
-        var photoPreview = new Image();
+    /**
+     * @private
+     */
+    _getSrc: function() {
+      var photoPreview = new Image();
+
+      if (this.model.get('preview')) {
+        photoPreview.src = this.model.get('preview');
+      } else if (this.model.get('url')) {
         photoPreview.src = this.model.get('url');
-
-        this._imageLoadTimeout = setTimeout(function() {
-          this.el.classList.add('picture-load-failure');
-        }.bind(this), REQUEST_FAILURE_TIMEOUT);
-
-        photoPreview.addEventListener('load', this._onPreviewLoad);
-        photoPreview.addEventListener('error', this._onPreviewFail);
-        photoPreview.addEventListener('abort', this._onPreviewFail);
       }
+
+      this._imageLoadTimeout = setTimeout(function() {
+        this.el.classList.add('picture-load-failure');
+      }.bind(this), REQUEST_FAILURE_TIMEOUT);
+
+      photoPreview.addEventListener('load', this._onPreviewLoad);
+      photoPreview.addEventListener('error', this._onPreviewFail);
+      photoPreview.addEventListener('abort', this._onPreviewFail);
     },
 
     /**
