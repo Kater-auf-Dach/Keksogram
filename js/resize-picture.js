@@ -226,12 +226,12 @@ define(function() {
         this._resizeConstraint.x = x;
       }
 
-      if ((typeof y !== 'undefined') && (y >= 0) && (moveY <= this._container.width)) {
+      if ((typeof y !== 'undefined') && (y >= 0) && (moveY <= this._container.height)) {
         this._resizeConstraint.y = y;
       }
 
       if (typeof side !== 'undefined') {
-        this._resizeConstraint.side = side;
+        this._resizeConstraint.side = parseInt(side, 10);
       }
 
       requestAnimationFrame(function() {

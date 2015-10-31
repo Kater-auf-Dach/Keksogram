@@ -38,12 +38,12 @@ define(['resize-picture'], function(Resizer) {
 
   resizeFormX.onchange = function() {
     //console.log(resizeFormX.value);
-    resizer.setConstraint(resizeFormX.value)
+    resizer.setConstraint(+resizeFormX.value, +resizeFormY.value, +resizeSide.value)
   };
 
   resizeFormY.onchange = function() {
     //console.log(resizeFormY.value);
-    resizer.setConstraint(resizeFormX.value, resizeFormY.value, resizeSide.value)
+    resizer.setConstraint(+resizeFormX.value, +resizeFormY.value, +resizeSide.value)
   };
 
 //

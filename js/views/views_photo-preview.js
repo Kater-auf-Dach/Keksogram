@@ -21,6 +21,11 @@ define(function() {
     },
 
     render: function() {
+      this._video = document.querySelector('video');
+      if (this._video) {
+        this._photo = document.createElement('img');
+        this.el.replaceChild(this._photo, this._video);
+      }
       this.el.querySelector('img').src = this.model.get('url');
       this.el.querySelector('.likes-count').textContent = this.model.get('likes');
       this.el.querySelector('.comments-count').textContent = this.model.get('comments');

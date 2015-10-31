@@ -1,7 +1,10 @@
 /*global Backbone */
 'use strict';
 
-define(['views/views_photo-preview'], function(GalleryView) {
+define([
+  'views/views_photo-preview',
+  'views/views_video-preview'
+], function(GalleryView, VideoView) {
   /**
    * @enum {number}
    */
@@ -61,18 +64,19 @@ define(['views/views_photo-preview'], function(GalleryView) {
    * @private
    */
   Gallery.prototype._showCurrentPhoto = function() {
-
-    /**
-     * @type {*|GalleryView}
-     */
-    var galleryElement = new GalleryView({ model: this._photos.at(this._currentPhoto) });
+    var currentModel = this._photos.at(this._currentPhoto);
+    var galleryElement;
+    if (currentModel.get('preview')) {
+      galleryElement = new VideoView({ model: currentModel });
+    } else {
+      galleryElement = new GalleryView({ model: currentModel });
+    }
     galleryElement.setElement(this._photoContainer);
     galleryElement.render();
   };
 
 
   Gallery.prototype.show = function() {
-
     this._galleryOverlay.classList.remove('invisible');
     this._photo.addEventListener('click', this._onPhotoClick);
     this._buttonClose.addEventListener('click', this._onCloseClick);

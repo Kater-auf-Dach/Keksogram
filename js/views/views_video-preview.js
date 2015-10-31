@@ -4,24 +4,23 @@
 define(function() {
 
   var VideoView = Backbone.View.extend({
-    event: {
-      'click video': '_togglePlayback'
-    },
-
-    inialize: function() {
+    initialize: function() {
       this._togglePlayback = this._togglePlayback.bind(this);
     },
 
     render: function() {
-      this.controls = false;
-      this.src = this.model.get('url');
-      this.type = 'video/mp4';
-      this.poster = this.model.get('preview');
-      this.addEventListener('onended', this.play())
+      this._video = document.createElement('video');
+      this._video.src = this.model.get('url');
+      this._video.loop = true;
+      this._video.addEventListener('click', this._togglePlayback);
+
+      this.el.replaceChild(this._video, this.el.querySelector('img'));   
+      this.el.querySelector('.likes-count').textContent = this.model.get('likes');
+      this.el.querySelector('.comments-count').textContent = this.model.get('comments');
     },
 
     _togglePlayback: function() {
-      (this.paused) ? this.play() : this.pause();
+      (this._video.paused) ? this._video.play() : this._video.pause();
     }
   });
 
