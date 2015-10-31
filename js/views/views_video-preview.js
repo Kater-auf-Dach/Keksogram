@@ -14,13 +14,17 @@ define(function() {
       this._video.loop = true;
       this._video.addEventListener('click', this._togglePlayback);
 
-      this.el.replaceChild(this._video, this.el.querySelector('img'));   
+      this.el.replaceChild(this._video, this.el.querySelector('img'));
       this.el.querySelector('.likes-count').textContent = this.model.get('likes');
       this.el.querySelector('.comments-count').textContent = this.model.get('comments');
     },
 
     _togglePlayback: function() {
-      (this._video.paused) ? this._video.play() : this._video.pause();
+      if (this._video.paused) {
+        this._video.play();
+      } else {
+        this._video.pause();
+      }
     }
   });
 

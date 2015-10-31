@@ -55,5 +55,5 @@ define(function() {
   }
 
   setFilter();
-  
+
 });

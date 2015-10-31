@@ -1,3 +1,4 @@
+/*global resizer*/
 'use strict';
 
 define(['resize-picture'], function(Resizer) {

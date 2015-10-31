@@ -104,7 +104,12 @@ define(function() {
       this._ctx.fillStyle = '000';
       this._ctx.lineWidth = 6;
       this._ctx.setLineDash([15, 10]);
-      this._ctx.strokeRect(-this._resizeConstraint.side / 2, -this._resizeConstraint.side / 2, this._resizeConstraint.side, this._resizeConstraint.side);
+      this._ctx.strokeRect(
+        (-this._resizeConstraint.side / 2),
+        (-this._resizeConstraint.side / 2),
+        this._resizeConstraint.side,
+        this._resizeConstraint.side
+      );
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
@@ -220,8 +225,8 @@ define(function() {
      * @param {number} side
      */
     setConstraint: function(x, y, side) {
-      var moveX = x +  this._resizeConstraint.side;
-      var moveY = y +  this._resizeConstraint.side;
+      var moveX = x + this._resizeConstraint.side;
+      var moveY = y + this._resizeConstraint.side;
       if ((typeof x !== 'undefined') && (x >= 0) && (moveX <= this._container.width)) {
         this._resizeConstraint.x = x;
       }
@@ -231,7 +236,10 @@ define(function() {
       }
 
       if (typeof side !== 'undefined') {
-        this._resizeConstraint.side = parseInt(side, 10);
+        var s = parseInt(side, 10);
+        if (s <= this._container.width || s <= this._container.height) {
+          this._resizeConstraint.side = s;
+        }
       }
 
       requestAnimationFrame(function() {
@@ -312,5 +320,5 @@ define(function() {
   };
 
   return Resizer;
-  
+
 });

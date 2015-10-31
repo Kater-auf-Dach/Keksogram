@@ -1,7 +1,7 @@
 /*global Backbone */
 'use strict';
 
-require.config({
+requirejs.config({
   baseUrl: 'js'
 });
 
@@ -137,8 +137,7 @@ function(PhotoModel, PhotosCollection, PhotoView, Gallery) {
     var filterName = hashValue.match(/^#filters\/(\S+)$/);
     if (filterName) {
       setActiveFilter(filterName[1]);
-    }
-    else {
+    } else {
       setActiveFilter('popular');
     }
   }
@@ -157,7 +156,7 @@ function(PhotoModel, PhotosCollection, PhotoView, Gallery) {
         }
         clickedFilter = clickedFilter.parentElement;
       }
-    })
+    });
   }
 
 
@@ -211,7 +210,7 @@ function(PhotoModel, PhotosCollection, PhotoView, Gallery) {
 
   photosCollection.fetch({ timeout: REQUEST_FAILURE_TIMEOUT }).success(function(loaded, state, jqXHR) {
     initiallyLoaded = jqXHR.responseJSON;
-    window.addEventListener('hashchange', function () {
+    window.addEventListener('hashchange', function() {
       parseURL();
     });
     initFilters();

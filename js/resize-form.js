@@ -1,3 +1,4 @@
+/*global resizer*/
 'use strict';
 
 define(['resize-picture'], function(Resizer) {
@@ -10,11 +11,11 @@ define(['resize-picture'], function(Resizer) {
 
   var resizeFormX = resizeForm['resize-x'];
   var resizeFormY = resizeForm['resize-y'];
-  var resizeSide  = resizeForm['resize-size'];
+  var resizeSide = resizeForm['resize-size'];
 
   resizeFormX.min = 0;
   resizeFormY.min = 0;
-  resizeSide.min  = 50;
+  resizeSide.min = 50;
 
 
   previewImage.onload = function() {
@@ -23,7 +24,7 @@ define(['resize-picture'], function(Resizer) {
 
     resizeFormX.max = previewImageX;
     resizeFormY.max = previewImageY;
-    resizeSide.max = (previewImageX < previewImageY) ?  previewImageX : previewImageY;
+    resizeSide.max = (previewImageX < previewImageY) ? previewImageX : previewImageY;
   };
 
   resizeSide.onchange = function() {
@@ -37,16 +38,13 @@ define(['resize-picture'], function(Resizer) {
   };
 
   resizeFormX.onchange = function() {
-    //console.log(resizeFormX.value);
-    resizer.setConstraint(+resizeFormX.value, +resizeFormY.value, +resizeSide.value)
+    resizer.setConstraint(+resizeFormX.value, +resizeFormY.value, +resizeSide.value);
   };
 
   resizeFormY.onchange = function() {
-    //console.log(resizeFormY.value);
-    resizer.setConstraint(+resizeFormX.value, +resizeFormY.value, +resizeSide.value)
+    resizer.setConstraint(+resizeFormX.value, +resizeFormY.value, +resizeSide.value);
   };
 
-//
   prevButton.onclick = function(event) {
     event.preventDefault();
     resizeForm.reset();
@@ -64,11 +62,10 @@ define(['resize-picture'], function(Resizer) {
   };
 
   window.addEventListener('resizerchange', function() {
-    console.log(resizeFormX.value, resizeFormY.value, resizeSide.value);
     var photoConstraint = resizer.getConstraint();
     resizeFormX.value = Math.floor(photoConstraint.x);
     resizeFormY.value = Math.floor(photoConstraint.y);
     resizeSide.value = Math.floor(photoConstraint.side);
-  })
+  });
 
 });
