@@ -1,9 +1,5 @@
 # Проект «Кексограм»
 
-* Студент: [Kater-auf-Dach].
-
-
---
 
 <a href="https://htmlacademy.ru/js_intensive"><img align="left" width="50" height="50" title="HTML Academy" src="https://htmlacademy.ru/static/img/logo-github.svg"></a>
 
